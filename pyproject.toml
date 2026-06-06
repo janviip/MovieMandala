@@ -1,0 +1,13 @@
+[project]
+name = "movie-mandala"
+version = "0.1.0"
+description = "Movie Mandala is a FastAPI-based movie recommender web app."
+readme = "README.md"
+requires-python = ">=3.11"
+dependencies = [
+    "fastapi>=0.136.3",
+    "numpy>=2.4.6",
+    "pandas>=3.0.3",
+    "scikit-learn>=1.9.0",
+    "sqlalchemy>=2.0.50",
+]
