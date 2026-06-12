@@ -24,7 +24,7 @@ CREATE TABLE movies (
     genre VARCHAR(100),
     director VARCHAR(100),
     release_year INT,
-    overview TEXT,
+    overview TEXT
 );
 
 --______________________________________________________________________________________
@@ -37,6 +37,3 @@ CREATE TABLE search_history (
     searched_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (user_id) REFERENCES users(user_id)
 );
-
-
-
