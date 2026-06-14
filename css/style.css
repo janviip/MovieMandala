@@ -1,76 +1,226 @@
-*{
-    margin:0;
-    padding:0;
-    box-sizing:border-box;
-    font-family:Arial, sans-serif;
+/* ===== RESET ===== */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
 }
 
-body{
-    background:#141414;
-    height:100vh;
-    display:flex;
-    justify-content:center;
-    align-items:center;
+body {
+  font-family: 'Segoe UI', sans-serif;
+  background: #f0f0f0;
 }
 
-.container{
-    width:100%;
-    display:flex;
-    justify-content:center;
+/* ===== NAVBAR ===== */
+.navbar-logo {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  object-fit: cover;
 }
 
-.login-box{
-    width:400px;
-    background:#1f1f1f;
-    padding:40px;
-    border-radius:12px;
-    text-align:center;
-    box-shadow:0 0 20px rgba(0,0,0,0.4);
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 8px;
 }
 
-.logo{
-    width:100px;
-    margin-bottom:10px;
+.brand-logo {
+  font-size: 22px;
 }
 
-h1{
-    color:#fff;
-    margin-bottom:10px;
+.brand-name {
+  color: #ffffff;
+  font-size: 16px;
+  font-weight: 600;
 }
 
-.login-box p{
-    color:#ccc;
-    margin-bottom:20px;
+.nav-links {
+  display: flex;
+  align-items: center;
+  gap: 20px;
 }
 
-input{
-    width:100%;
-    padding:12px;
-    margin:10px 0;
-    border:none;
-    border-radius:6px;
+.nav-links a {
+  color: #cccccc;
+  text-decoration: none;
+  font-size: 14px;
 }
 
-button{
-    width:100%;
-    padding:12px;
-    border:none;
-    border-radius:6px;
-    background:#e50914;
-    color:white;
-    font-size:16px;
-    cursor:pointer;
+.nav-links a:hover {
+  color: #ffffff;
 }
 
-button:hover{
-    background:#c40812;
+.btn-nav {
+  background: #e50914;
+  color: #fff;
+  border: none;
+  padding: 7px 18px;
+  border-radius: 6px;
+  font-size: 14px;
+  cursor: pointer;
 }
 
-.signup-text{
-    margin-top:20px;
+/* ===== AUTH BACKGROUND ===== */
+.auth-bg {
+  min-height: calc(100vh - 52px);
+  background: #f0f0f0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 32px 16px;
 }
 
-.signup-text a{
-    color:#e50914;
-    text-decoration:none;
+/* ===== AUTH CARD ===== */
+.auth-card {
+  background: #ffffff;
+  border-radius: 12px;
+  padding: 36px 32px;
+  width: 100%;
+  max-width: 380px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+}
+
+/* ===== AUTH LOGO ===== */
+.auth-logo {
+  text-align: center;
+  margin-bottom: 24px;
+}
+
+.logo-circle {
+  width: 60px;
+  height: 60px;
+  background: #1a1a2e;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 26px;
+  margin: 0 auto 10px;
+}
+
+.auth-logo h2 {
+  font-size: 22px;
+  color: #222;
+  margin-bottom: 4px;
+}
+
+.auth-logo p {
+  font-size: 13px;
+  color: #888;
+}
+
+/* ===== FORM ===== */
+.form-group {
+  margin-bottom: 16px;
+}
+
+.form-group label {
+  display: block;
+  font-size: 13px;
+  color: #555;
+  margin-bottom: 6px;
+}
+
+.form-group input {
+  width: 100%;
+  padding: 10px 14px;
+  border: 1px solid #ddd;
+  border-radius: 7px;
+  font-size: 14px;
+  color: #333;
+  background: #fafafa;
+  outline: none;
+}
+
+.form-group input:focus {
+  border-color: #1a1a2e;
+}
+
+.forgot {
+  text-align: right;
+  font-size: 12px;
+  color: #1a1a2e;
+  cursor: pointer;
+  margin-top: -8px;
+  margin-bottom: 16px;
+}
+
+/* ===== BUTTONS ===== */
+.btn-primary {
+  width: 100%;
+  background: #1a1a2e;
+  color: #fff;
+  border: none;
+  padding: 12px;
+  border-radius: 7px;
+  font-size: 15px;
+  cursor: pointer;
+  margin-bottom: 14px;
+}
+
+.btn-primary:hover {
+  background: #2a2a4e;
+}
+
+.btn-google {
+  width: 100%;
+  background: #fff;
+  color: #444;
+  border: 1px solid #ddd;
+  padding: 11px;
+  border-radius: 7px;
+  font-size: 14px;
+  cursor: pointer;
+}
+
+.btn-google:hover {
+  background: #f5f5f5;
+}
+
+/* ===== DIVIDER ===== */
+.divider {
+  text-align: center;
+  font-size: 12px;
+  color: #aaa;
+  margin-bottom: 14px;
+  position: relative;
+}
+
+.divider::before,
+.divider::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  width: 42%;
+  height: 1px;
+  background: #eee;
+}
+
+.divider::before { left: 0; }
+.divider::after  { right: 0; }
+
+/* ===== SWITCH LINK ===== */
+.switch-link {
+  text-align: center;
+  font-size: 13px;
+  color: #888;
+  margin-top: 16px;
+}
+
+.switch-link span {
+  color: #e50914;
+  cursor: pointer;
+  font-weight: 600;
+}
+
+/* ===== HIDDEN ===== */
+.hidden {
+  display: none !important;
+}
+.auth-logo-img {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  object-fit: cover;
+  margin-bottom: 10px;
 }

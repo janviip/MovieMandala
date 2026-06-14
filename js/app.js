@@ -1,11 +1,12 @@
-document
-.getElementById("loginForm")
-.addEventListener("submit", function(e){
+// Show a specific page (signup or login)
+function showPage(pageName) {
+  document.getElementById('signupPage').classList.add('hidden');
+  document.getElementById('loginPage').classList.add('hidden');
 
-    e.preventDefault();
+  document.getElementById(pageName + 'Page').classList.remove('hidden');
+}
 
-    alert("Login Successful");
-
-    window.location.href = "result.html";
-
-});
+// When login is clicked, go to home page
+function goToHome() {
+  window.location.href = 'result.html';
+}

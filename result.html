@@ -1,29 +1,63 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Movie Mandala</title>
-
-<link rel="stylesheet" href="css/style.css">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Movie Mandala - Home</title>
+  <link rel="stylesheet" href="css/style.css" />
+  <link rel="stylesheet" href="css/result.css" />
 </head>
-
 <body>
 
-<div class="login-box">
+  <!-- ===== NAVBAR ===== -->
+  <nav class="navbar">
+    <div class="brand">
+   <img src="assets/logo.png" class="navbar-logo" />
+      <span class="brand-name">Movie Mandala</span>
+    </div>
+    <div class="nav-links">
+      <a href="index.html">Home</a>
+      <a href="#">About Us</a>
+      <a href="index.html">Login</a>
+    </div>
+  </nav>
 
-    <h1>Welcome to Movie Mandala</h1>
-
-    <input
+  <!-- ===== SEARCH SECTION ===== -->
+  <div class="search-section">
+    <h2>Discover movies you'll love</h2>
+    <p>Enter a movie name and we'll find similar ones for you</p>
+    <div class="search-bar">
+      <input
         type="text"
-        placeholder="Enter Movie Name"
-    >
+        id="searchInput"
+        placeholder="Search a movie you like..."
+      />
+      <button onclick="searchMovie()">🔍 Search</button>
+    </div>
+  </div>
 
-    <button>
-        Get Recommendations
-    </button>
+  <!-- ===== RESULTS SECTION ===== -->
+  <div class="results-section">
 
-</div>
+    <!-- shown before any search -->
+    <div id="defaultMessage" class="default-msg">
+      <p>🎬 Search for a movie above to see recommendations!</p>
+    </div>
+
+    <!-- shown after search -->
+    <div id="resultsContainer" class="hidden">
+      <h3 class="results-title">
+        Recommended movies for: <span id="searchedMovie"></span>
+      </h3>
+      <div class="movies-grid" id="moviesGrid">
+        <!-- movie cards go here via JavaScript -->
+      </div>
+    </div>
+
+  </div>
+
+  <script src="js/app.js"></script>
+  <script src="js/result.js"></script>
 
 </body>
 </html>
