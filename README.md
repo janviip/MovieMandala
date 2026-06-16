@@ -3,10 +3,10 @@
 Movie Mandala is a FastAPI-based movie recommender web app with:
 
 - JWT cookie auth with signup/login
-- SQLite persistence for users, cached movies, and recommendation history
+- supabase as database using PostGreSQL
 - TMDB ingestion for the movie catalog
 - TF-IDF vectorization + cosine similarity using scikit-learn
-- Custom HTML, CSS, and vanilla JavaScript frontend
+- Custom HTML, CSS, and JavaScript frontend
 
 ## Run locally
 
