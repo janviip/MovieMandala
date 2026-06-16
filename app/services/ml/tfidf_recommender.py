@@ -17,6 +17,22 @@ from app.services.ml.preprocessing import MovieFeaturePreprocessor, normalize_te
 SearchMode = Literal["title", "tmdb_id", "free_text"]
 
 
+def _as_str_tuple(value: Any) -> tuple[str, ...]:
+    if value is None or (isinstance(value, float) and pd.isna(value)):
+        return ()
+    if isinstance(value, np.ndarray):
+        value = value.tolist()
+    elif not isinstance(value, (list, tuple)):
+        value = [value]
+    return tuple(str(item) for item in value if item is not None and not pd.isna(item))
+
+
+def _optional_str(value: Any) -> str | None:
+    if value is None or (isinstance(value, float) and pd.isna(value)):
+        return None
+    return str(value)
+
+
 @dataclass(frozen=True)
 class RecommendationResult:
     tmdb_id: int
@@ -206,10 +222,10 @@ class MovieRecommender:
             tmdb_id=int(row["tmdb_id"]),
             title=str(row["title"]),
             score=round(float(score), 6),
-            overview=str(row.get("overview", "")),
-            release_date=str(row.get("release_date", "")),
-            genres=tuple(row.get("genres", ()) or ()),
-            poster_path=row.get("poster_path"),
+            overview=str(row.get("overview", "") or ""),
+            release_date=str(row.get("release_date", "") or ""),
+            genres=_as_str_tuple(row.get("genres")),
+            poster_path=_optional_str(row.get("poster_path")),
             vote_average=float(row.get("vote_average", 0.0) or 0.0),
             popularity=float(row.get("popularity", 0.0) or 0.0),
         )
