@@ -9,51 +9,30 @@
 </head>
 <body>
 
-  <!-- ===== NAVBAR ===== -->
-  <nav class="navbar">
-    <div class="brand">
-   <img src="assets/logo.png" class="navbar-logo" />
-      <span class="brand-name">Movie Mandala</span>
-    </div>
-    <div class="nav-links">
-      <a href="result.html">Home</a>
-      <a href="#">About Us</a>
-      <a href="signup.html">Login</a>
-    </div>
+  <!-- ===== TOP NAV ===== -->
+  <nav class="top-nav">
+    <a href="result.html">Home</a>
+    <a href="#">About Us</a>
+    <a href="login.html" class="active">Login</a>
   </nav>
 
-  <!-- ===== SEARCH SECTION ===== -->
-  <div class="search-section">
-    <h2>Discover movies you'll love</h2>
-    <p>Enter a movie name and we'll find similar ones for you</p>
-    <div class="search-bar">
-      <input
-        type="text"
-        id="searchInput"
-        placeholder="Search a movie you like..."
-      />
-      <button onclick="searchMovie()">🔍 Search</button>
+  <!-- ===== CENTER LOGO + SEARCH ===== -->
+  <div class="center-wrap">
+    <div class="logo-circle">
+      <img src="assets/logo.png" alt="Movie Mandala logo" />
+    </div>
+    <p class="prompt-text">Select or search the movie that you like?</p>
+    <div class="search-row">
+      <input type="text" id="searchInput" placeholder="Search a movie......" />
+      <button onclick="searchMovie()">Search</button>
     </div>
   </div>
 
-  <!-- ===== RESULTS SECTION ===== -->
-  <div class="results-section">
-
-    <!-- shown before any search -->
-    <div id="defaultMessage" class="default-msg">
-      <p>🎬 Search for a movie above to see recommendations!</p>
+  <!-- ===== MOVIES SECTION ===== -->
+  <div class="movies-section">
+    <div class="movies-grid" id="moviesGrid">
+      <!-- 5 movie cards will be generated here by JavaScript -->
     </div>
-
-    <!-- shown after search -->
-    <div id="resultsContainer" class="hidden">
-      <h3 class="results-title">
-        Recommended movies for: <span id="searchedMovie"></span>
-      </h3>
-      <div class="movies-grid" id="moviesGrid">
-        <!-- movie cards go here via JavaScript -->
-      </div>
-    </div>
-
   </div>
 
   <script src="js/app.js"></script>
