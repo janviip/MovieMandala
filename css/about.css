@@ -15,12 +15,12 @@
 
 .top-nav a.active {
   text-decoration: underline;
-  color: #1a1a2e;
+  color: #15192e;
 }
 
 /* ===== HERO ===== */
 .hero {
-  background: #1a1a2e;
+  background: #15192e;
   padding: 40px 28px;
   text-align: center;
 }
@@ -49,9 +49,9 @@
 
 .block h3 {
   font-size: 16px;
-  color: #1a1a2e;
+  color: #15192e;
   margin-bottom: 8px;
-  border-left: 3px solid #e50914;
+  border-left: 3px solid #d4453a;
   padding-left: 10px;
 }
 
@@ -81,7 +81,7 @@
   width: 56px;
   height: 56px;
   border-radius: 50%;
-  background: #1a1a2e;
+  background: #15192e;
   color: #fff;
   display: flex;
   align-items: center;
@@ -112,7 +112,7 @@
 
 .tag {
   background: #eef1f7;
-  color: #1a1a2e;
+  color: #15192e;
   font-size: 11px;
   padding: 4px 10px;
   border-radius: 12px;

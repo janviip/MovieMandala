@@ -15,7 +15,7 @@
 
 .top-nav a.active {
   text-decoration: underline;
-  color: #1a1a2e;
+  color: #15192e;
 }
 
 /* ===== CENTER LOGO + SEARCH ===== */
@@ -64,7 +64,7 @@
 }
 
 .search-row input:focus {
-  border-color: #1a1a2e;
+  border-color: #15192e;
 }
 
 .search-row button {
