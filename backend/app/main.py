@@ -1,16 +1,16 @@
 from fastapi import FastAPI
+from app.core.database import Base, engine
+from app.api import auth
 
-from backend.app.database.database import Base, engine
-from app.models import User, Movie
-from app.routers import auth
-
-app = FastAPI(title="Movie Mandala")
-
+# This creates your tables in Supabase if they don't exist yet
 Base.metadata.create_all(bind=engine)
 
-app.include_router(auth.router)
+app = FastAPI(title="Movie Mandala API")
+
+# Connect the auth routes we just made
+app.include_router(auth.router, tags=["Authentication"])
 
 
 @app.get("/")
-def home():
-    return {"message": "Movie Mandala running"}
+def root():
+    return {"message": "Welcome to Movie Mandala API"}
