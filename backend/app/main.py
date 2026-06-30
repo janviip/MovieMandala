@@ -1,6 +1,7 @@
 from fastapi import FastAPI
 from app.core.database import Base, engine
 from app.api import auth
+from app.models.models import User, Movie
 
 # This creates your tables in Supabase if they don't exist yet
 Base.metadata.create_all(bind=engine)
