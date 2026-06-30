@@ -1,6 +1,6 @@
 from fastapi import FastAPI
 
-from app.database import Base, engine
+from backend.app.database.database import Base, engine
 from app.models import User, Movie
 from app.routers import auth
 
