@@ -8,35 +8,53 @@
   <link rel="stylesheet" href="css/result.css" />
 </head>
 <body>
-
-  <!-- ===== TOP NAV ===== -->
-  <nav class="top-nav">
+  <!-- ===== NAVBAR ===== -->
+<nav class="navbar">
+  <div class="brand">
+    <img src="assets/logo.png" class="navbar-logo" />
+    <span class="brand-name">Movie Mandala</span>
+  </div>
+  <div class="nav-links">
     <a href="result.html">Home</a>
     <a href="about.html">About Us</a>
-    <a href="login.html" class="active">Login</a>
-  </nav>
+    <a href="login.html" class="btn-nav">Login</a>
+  </div>
+</nav>
 
-  <!-- ===== CENTER LOGO + SEARCH ===== -->
-  <div class="center-wrap">
-    <div class="logo-circle">
-      <img src="assets/logo.png" alt="Movie Mandala logo" />
-    </div>
-    <p class="prompt-text">Select or search the movie that you like?</p>
+<!-- ===== HERO ===== -->
+<div class="hero">
+  <div class="hero-content">
+    <h1>Find your next favourite movie</h1>
+    <p>Tell us a movie you like, and we'll find similar ones for you.</p>
     <div class="search-row">
       <input type="text" id="searchInput" placeholder="Search a movie......" />
       <button onclick="searchMovie()">Search</button>
     </div>
   </div>
+</div>
 
-  <!-- ===== MOVIES SECTION ===== -->
-  <div class="movies-section">
-    <div class="movies-grid" id="moviesGrid">
-      <!-- 5 movie cards will be generated here by JavaScript -->
-    </div>
-  </div>
+<!-- ===== SEARCH RESULTS (hidden until user searches) ===== -->
+<div class="row-section" id="searchResultsSection" style="display:none;">
+  <div class="row-title">Recommended for you</div>
+  <div class="row-scroll" id="resultsRow"></div>
+</div>
 
-  <script src="js/app.js"></script>
-  <script src="js/result.js"></script>
+<!-- ===== GENRE SECTIONS ===== -->
+<div class="row-section">
+  <div class="row-title">English movies</div>
+  <div class="row-scroll" id="englishRow"></div>
+</div>
 
+<div class="row-section">
+  <div class="row-title">Horror movies</div>
+  <div class="row-scroll" id="horrorRow"></div>
+</div>
+
+<div class="row-section">
+  <div class="row-title">Romantic movies</div>
+  <div class="row-scroll" id="romanticRow"></div>
+</div>
+
+  
 </body>
 </html>

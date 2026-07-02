@@ -1,19 +1,15 @@
-const fakeMovies = [
-  { title: "Movie name" },
-  { title: "Movie name" },
-  { title: "Movie name" },
-  { title: "Movie name" },
-  { title: "Movie name" },
-];
+const englishMovies = ["Inception", "The Dark Knight", "Interstellar", "Avatar", "Avengers"];
+const horrorMovies = ["The Conjuring", "Hereditary", "It", "Insidious", "Sinister"];
+const romanticMovies = ["Titanic", "The Notebook", "La La Land", "About Time", "Me Before You"];
 
-function renderMovies(movies) {
-  const grid = document.getElementById('moviesGrid');
-  grid.innerHTML = movies.map(m => `
-    <div class="movie-slot">
-      <div class="name">${m.title}</div>
-      <div class="poster-box">
-        <!-- placeholder box like the wireframe; later this becomes <img src="poster_url"> -->
-      </div>
+const fakeResults = ["The Prestige", "Memento", "Shutter Island", "Tenet", "Arrival"];
+
+function renderRow(containerId, movies) {
+  const container = document.getElementById(containerId);
+  container.innerHTML = movies.map(title => `
+    <div class="poster-card">
+      <div class="poster-box">No poster</div>
+      <div class="poster-name">${title}</div>
     </div>
   `).join('');
 }
@@ -24,8 +20,10 @@ function searchMovie() {
     alert('Please enter a movie name!');
     return;
   }
-  renderMovies(fakeMovies);
+  document.getElementById('searchResultsSection').style.display = 'block';
+  renderRow('resultsRow', fakeResults);
 }
 
-// show 5 placeholder cards when page first loads
-renderMovies(fakeMovies);
+renderRow('englishRow', englishMovies);
+renderRow('horrorRow', horrorMovies);
+renderRow('romanticRow', romanticMovies);
