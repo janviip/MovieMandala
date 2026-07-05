@@ -1,39 +1,50 @@
-/* ===== TOP NAV (shared style, same as result.html) ===== */
+/* ===== BODY ===== */
+body {
+  background: #141414;
+  margin: 0;
+}
+
+/* ===== NAVBAR ===== */
 .top-nav {
   display: flex;
   justify-content: flex-end;
   gap: 24px;
   padding: 14px 28px;
-  border-bottom: 1px solid #e5e5e5;
+  background: #000;
+  border-bottom: 1px solid #222;
 }
 
 .top-nav a {
   font-size: 14px;
-  color: #333;
+  color: #fff;
   text-decoration: none;
 }
 
+.top-nav a:hover {
+  color: #e50914;
+}
+
 .top-nav a.active {
-  text-decoration: underline;
-  color: #15192e;
+  color: #e50914;
 }
 
 /* ===== HERO ===== */
 .hero {
-  background: #15192e;
+  background: #000;
   padding: 40px 28px;
   text-align: center;
+  border-bottom: 1px solid #222;
 }
 
 .hero h1 {
   color: #fff;
-  font-size: 24px;
+  font-size: 26px;
   margin-bottom: 8px;
 }
 
 .hero p {
   color: #aaa;
-  font-size: 13px;
+  font-size: 14px;
 }
 
 /* ===== CONTENT ===== */
@@ -44,21 +55,21 @@
 }
 
 .block {
-  margin-bottom: 28px;
+  margin-bottom: 32px;
 }
 
 .block h3 {
   font-size: 16px;
-  color: #15192e;
-  margin-bottom: 8px;
-  border-left: 3px solid #d4453a;
+  color: #fff;
+  margin-bottom: 10px;
+  border-left: 3px solid #e50914;
   padding-left: 10px;
 }
 
 .block p {
   font-size: 14px;
-  color: #444;
-  line-height: 1.7;
+  color: #ccc;
+  line-height: 1.8;
 }
 
 /* ===== TEAM GRID ===== */
@@ -71,35 +82,36 @@
 
 .member {
   text-align: center;
-  background: #fafafa;
-  border: 1px solid #eee;
+  background: #1f1f1f;
+  border: 1px solid #2a2a2a;
   border-radius: 8px;
-  padding: 16px 10px;
+  padding: 20px 10px;
 }
 
 .avatar {
   width: 56px;
   height: 56px;
   border-radius: 50%;
-  background: #15192e;
+  background: #e50914;
   color: #fff;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 18px;
-  margin: 0 auto 8px;
+  font-size: 20px;
+  font-weight: 700;
+  margin: 0 auto 10px;
 }
 
 .member .name {
   font-size: 13px;
   font-weight: 600;
-  color: #222;
+  color: #fff;
 }
 
 .member .role {
   font-size: 11px;
-  color: #888;
-  margin-top: 2px;
+  color: #aaa;
+  margin-top: 4px;
 }
 
 /* ===== TOOLS TAGS ===== */
@@ -111,9 +123,10 @@
 }
 
 .tag {
-  background: #eef1f7;
-  color: #15192e;
-  font-size: 11px;
-  padding: 4px 10px;
-  border-radius: 12px;
+  background: #2a2a2a;
+  color: #fff;
+  font-size: 12px;
+  padding: 5px 12px;
+  border-radius: 20px;
+  border: 1px solid #444;
 }

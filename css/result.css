@@ -1,3 +1,44 @@
+/* FIX - navbar logo size */
+.navbar-logo {
+  width: 36px !important;
+  height: 36px !important;
+  border-radius: 50% !important;
+  object-fit: cover !important;
+}
+
+.brand-name {
+  color: #f0a93e;
+  font-size: 16px;
+  font-weight: 600;
+}
+
+.navbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 14px 28px;
+  background: #15192e;
+}
+
+.nav-links {
+  display: flex;
+  align-items: center;
+  gap: 22px;
+}
+
+.nav-links a {
+  color: #ccc;
+  font-size: 13px;
+  text-decoration: none;
+}
+
+.btn-nav {
+  background: #f0a93e !important;
+  color: #15192e !important;
+  padding: 7px 16px;
+  border-radius: 5px;
+  font-weight: 600;
+}
 body {
   background: #f7f6f3;
   margin: 0;

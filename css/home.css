@@ -1,0 +1,37 @@
+*{box-sizing:border-box;margin:0;padding:0;}
+body{background:#141414;font-family:'Segoe UI',sans-serif;color:#fff;}
+
+/* NAVBAR */
+.navbar{display:flex;align-items:center;justify-content:space-between;padding:16px 32px;background:#000;}
+.brand{display:flex;align-items:center;gap:10px;}
+.navbar-logo{width:38px;height:38px;border-radius:50%;object-fit:cover;}
+.brand-name{color:#e50914;font-size:20px;font-weight:700;}
+.nav-links{display:flex;align-items:center;gap:24px;}
+.nav-links a{color:#fff;font-size:14px;text-decoration:none;}
+.nav-links a:hover{color:#e50914;}
+.btn-signin{background:#e50914;color:#fff;border:none;padding:8px 18px;border-radius:4px;font-size:14px;font-weight:700;cursor:pointer;}
+
+/* HERO */
+.hero{padding:60px 32px;text-align:center;}
+.hero h1{font-size:32px;font-weight:700;margin-bottom:10px;}
+.hero h1 span{color:#e50914;}
+.hero p{color:#aaa;font-size:15px;margin-bottom:24px;}
+.search-wrap{display:flex;max-width:480px;margin:0 auto;border-radius:4px;overflow:hidden;}
+.search-wrap input{flex:1;padding:12px 16px;border:none;font-size:15px;outline:none;}
+.search-wrap button{background:#e50914;color:#fff;border:none;padding:12px 22px;font-size:15px;font-weight:700;cursor:pointer;}
+.search-wrap button:hover{background:#c1070f;}
+
+/* SECTIONS */
+.sections{padding:20px 32px 50px;}
+.genre-section{margin-bottom:36px;}
+.genre-title{font-size:18px;font-weight:700;margin-bottom:12px;}
+
+/* CARDS */
+.cards-row{display:flex;gap:10px;overflow-x:auto;padding-bottom:6px;}
+.movie-card{flex:0 0 140px;background:#222;border-radius:6px;padding:16px 10px;text-align:center;cursor:pointer;}
+.movie-card:hover{background:#2c2c2c;}
+.movie-card .emoji{font-size:32px;margin-bottom:8px;}
+.movie-card .m-title{font-size:12px;font-weight:600;}
+.movie-card .m-year{font-size:11px;color:#888;margin-top:2px;}
+
+#searchSection{display:none;}
