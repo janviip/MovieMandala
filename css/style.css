@@ -237,3 +237,22 @@ body {
 .hidden {
   display: none !important;
 }
+.btn-nav {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 110px;
+  padding: 10px 28px;
+  border-radius: 8px;
+  border: none;
+  background: #e50914;
+  color: #fff;
+  font-weight: 600;
+  font-size: 0.95rem;
+  text-decoration: none;
+  transition: background 0.15s ease;
+}
+
+.btn-nav:hover {
+  background: #c40812;
+}
