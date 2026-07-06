@@ -1,5 +1,12 @@
 *{box-sizing:border-box;margin:0;padding:0;}
-body{background:linear-gradient(160deg, #1a0000 0%, #000000 55%, #2b0505 100%);font-family:'Segoe UI',sans-serif;color:#fff;min-height:100vh;}
+body{
+  background:
+    radial-gradient(ellipse 900px 700px at 100% 0%, rgba(229,9,20,0.55) 0%, rgba(139,0,0,0.25) 35%, transparent 65%),
+    #050505;
+  font-family:'Segoe UI',sans-serif;
+  color:#fff;
+  min-height:100vh;
+}
 /* NAVBAR */
 .navbar{display:flex;align-items:center;justify-content:space-between;padding:16px 32px;background:#000;}
 .brand{display:flex;align-items:center;gap:10px;}
@@ -11,7 +18,11 @@ body{background:linear-gradient(160deg, #1a0000 0%, #000000 55%, #2b0505 100%);f
 .btn-signin{background:#e50914;color:#fff;border:none;padding:8px 18px;border-radius:4px;font-size:14px;font-weight:700;cursor:pointer;}
 
 /* HERO */
-.hero{padding:60px 32px;text-align:center;}
+.hero{
+  padding:60px 32px;
+  text-align:center;
+  background:none;
+}
 .hero h1{font-size:48px;font-weight:800;margin-bottom:16px;}
 .hero h1 span{color:#e50914;}
 .hero p{color:#ccc;font-size:19px;margin-bottom:32px;}
