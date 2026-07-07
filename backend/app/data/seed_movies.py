@@ -5,7 +5,7 @@ from app.models.models import Movie
 
 BASE_URL = "https://api.themoviedb.org/3"
 
-def fetch_popular_movies(pages=5):
+def fetch_popular_movies(pages=25):
     all_movies = []
     for page in range(1, pages + 1):
         url = f"{BASE_URL}/movie/popular"
