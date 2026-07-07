@@ -1,0 +1,260 @@
+/* ===== RESET ===== */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: 'Segoe UI', sans-serif;
+  background: #141414;
+}
+
+/* ===== NAVBAR ===== */
+.navbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 14px 28px;
+  background: #000;
+}
+
+.navbar-logo {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.brand-name {
+  color: #e50914;
+  font-size: 18px;
+  font-weight: 700;
+  letter-spacing: 1px;
+}
+
+.nav-links {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+.nav-links a {
+  color: #fff;
+  text-decoration: none;
+  font-size: 14px;
+}
+
+.nav-links a:hover {
+  color: #e50914;
+}
+
+.btn-nav {
+  background: #e50914;
+  color: #fff;
+  border: none;
+  padding: 7px 18px;
+  border-radius: 4px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  text-decoration: none;
+}
+
+/* ===== AUTH BACKGROUND ===== */
+.auth-bg {
+  min-height: calc(100vh - 52px);
+  background:
+    radial-gradient(circle at 50% 0%, rgba(229,9,20,0.15) 0%, transparent 55%),
+    #141414;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 32px 16px;
+}
+
+/* ===== AUTH CARD ===== */
+.auth-card {
+  background: #1f1f1f;
+  border-radius: 8px;
+  padding: 40px 40px;
+  width: 100%;
+  max-width: 400px;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.6);
+  border: 1px solid #2a2a2a;
+}
+
+/* ===== AUTH LOGO ===== */
+.auth-logo {
+  text-align: center;
+  margin-bottom: 24px;
+}
+
+.auth-logo-img {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  object-fit: cover;
+  margin-bottom: 12px;
+}
+
+
+.auth-logo h2 {
+  font-size: 26px;
+  color: #fff;
+  margin-bottom: 4px;
+  font-weight: 700;
+}
+
+.auth-logo p {
+  font-size: 13px;
+  color: #888;
+}
+
+/* ===== FORM ===== */
+.form-group {
+  margin-bottom: 16px;
+}
+
+.form-group label {
+  display: block;
+  font-size: 13px;
+  color: #aaa;
+  margin-bottom: 6px;
+}
+
+.form-group input {
+  width: 100%;
+  padding: 13px 16px;
+  border: 1px solid #333;
+  border-radius: 6px;
+  font-size: 14px;
+  color: #fff;
+  background: #2a2a2a;
+  outline: none;
+}
+
+.form-group input:focus {
+  border-color: #e50914;
+  background: #333;
+}
+
+.form-group input::placeholder {
+  color: #666;
+}
+
+.forgot {
+  text-align: right;
+  font-size: 12px;
+  color: #aaa;
+  cursor: pointer;
+  margin-top: -8px;
+  margin-bottom: 16px;
+}
+
+.forgot:hover {
+  color: #e50914;
+}
+
+/* ===== BUTTONS ===== */
+.btn-primary {
+  width: 100%;
+  background: #e50914;
+  color: #fff;
+  border: none;
+  padding: 13px;
+  border-radius: 6px;
+  font-size: 16px;
+  font-weight: 700;
+  cursor: pointer;
+  margin-bottom: 14px;
+}
+
+.btn-primary:hover {
+  background: #c1070f;
+}
+
+.btn-google {
+  width: 100%;
+  background: #2a2a2a;
+  color: #fff;
+  border: 1px solid #444;
+  padding: 12px;
+  border-radius: 6px;
+  font-size: 14px;
+  cursor: pointer;
+}
+
+.btn-google:hover {
+  background: #333;
+}
+
+/* ===== DIVIDER ===== */
+.divider {
+  text-align: center;
+  font-size: 12px;
+  color: #555;
+  margin-bottom: 14px;
+  position: relative;
+}
+
+.divider::before,
+.divider::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  width: 42%;
+  height: 1px;
+  background: #333;
+}
+
+.divider::before { left: 0; }
+.divider::after  { right: 0; }
+
+/* ===== SWITCH LINK ===== */
+.switch-link {
+  text-align: center;
+  font-size: 13px;
+  color: #888;
+  margin-top: 16px;
+}
+
+.switch-link a {
+  color: #e50914;
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.switch-link a:hover {
+  text-decoration: underline;
+}
+
+/* ===== HIDDEN ===== */
+.hidden {
+  display: none !important;
+}
+.btn-nav {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 110px;
+  padding: 10px 28px;
+  border-radius: 8px;
+  border: none;
+  background: #e50914;
+  color: #fff;
+  font-weight: 600;
+  font-size: 0.95rem;
+  text-decoration: none;
+  transition: background 0.15s ease;
+}
+
+.btn-nav:hover {
+  background: #c40812;
+}

@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Movie Mandala - Home</title>
+  <link rel="stylesheet" href="/static/css/style.css" />
+  <link rel="stylesheet" href="/static/css/home.css" />
+  
+</head>
+<body>
+
+<!-- NAVBAR -->
+<nav class="navbar">
+  <div class="brand">
+    <img src="/static/assets/logo.png" class="navbar-logo" alt="Movie Mandala logo" />
+    <span class="brand-name">Movie Mandala</span>
+  </div>
+  <div class="nav-links">
+    <a href="/result">Home</a>
+    <a href="/about">About Us</a>
+    <button class="btn-signin" onclick="window.location.href='/login'">Sign In</button>
+  </div>
+</nav>
+
+<!-- HERO -->
+<div class="hero">
+  <h1>Find movies you'll <span>love</span></h1>
+  <p>Tell us a movie you like, and we'll find similar ones.</p>
+  <div class="search-wrap">
+    <input type="text" id="searchInput" placeholder="Try Inception, Titanic, Avatar..." />
+    <button onclick="doSearch()">Search</button>
+  </div>
+</div>
+
+<!-- SECTIONS -->
+<div class="sections">
+
+  <!-- SEARCH RESULTS -->
+  <div class="genre-section" id="searchSection">
+    <div class="genre-title">Results for: <span id="searchLabel"></span></div>
+    <div class="cards-row" id="searchResults"></div>
+  </div>
+
+  <div class="genre-section">
+    <div class="genre-title">English Movies</div>
+    <div class="cards-row" id="englishRow"></div>
+  </div>
+
+  <div class="genre-section">
+    <div class="genre-title">Horror Movies</div>
+    <div class="cards-row" id="horrorRow"></div>
+  </div>
+
+  <div class="genre-section">
+    <div class="genre-title">Romantic Movies</div>
+    <div class="cards-row" id="romanticRow"></div>
+  </div>
+
+  <div class="genre-section">
+    <div class="genre-title">Action Movies</div>
+    <div class="cards-row" id="actionRow"></div>
+  </div>
+
+</div>
+
+<script>
+const data = {
+  english:[
+    {title:"Inception",year:"2010",emoji:"🌀"},
+    {title:"Interstellar",year:"2014",emoji:"🚀"},
+    {title:"The Dark Knight",year:"2008",emoji:"🦇"},
+    {title:"Avatar",year:"2009",emoji:"🌿"},
+    {title:"Avengers",year:"2019",emoji:"⚡"},
+    {title:"Oppenheimer",year:"2023",emoji:"💥"},
+    {title:"Dune",year:"2021",emoji:"🏜️"},
+  ],
+  horror:[
+    {title:"The Conjuring",year:"2013",emoji:"👻"},
+    {title:"Hereditary",year:"2018",emoji:"🕯️"},
+    {title:"It",year:"2017",emoji:"🎈"},
+    {title:"Insidious",year:"2010",emoji:"😱"},
+    {title:"Sinister",year:"2012",emoji:"🎥"},
+    {title:"Get Out",year:"2017",emoji:"🚪"},
+    {title:"A Quiet Place",year:"2018",emoji:"🤫"},
+  ],
+  romantic:[
+    {title:"Titanic",year:"1997",emoji:"🚢"},
+    {title:"The Notebook",year:"2004",emoji:"💌"},
+    {title:"La La Land",year:"2016",emoji:"🎵"},
+    {title:"About Time",year:"2013",emoji:"⏳"},
+    {title:"Me Before You",year:"2016",emoji:"💛"},
+    {title:"Pride & Prejudice",year:"2005",emoji:"🌹"},
+    {title:"Crazy Rich Asians",year:"2018",emoji:"💎"},
+  ],
+  action:[
+    {title:"Mad Max",year:"2015",emoji:"🏎️"},
+    {title:"John Wick",year:"2014",emoji:"🔫"},
+    {title:"Top Gun",year:"2022",emoji:"✈️"},
+    {title:"Mission Impossible",year:"2023",emoji:"🕵️"},
+    {title:"Spider-Man",year:"2021",emoji:"🕷️"},
+    {title:"Black Panther",year:"2018",emoji:"🐾"},
+    {title:"Thor",year:"2022",emoji:"⚡"},
+  ]
+};
+
+const fakeResults = [
+  {title:"The Prestige",year:"2006",emoji:"🎩"},
+  {title:"Memento",year:"2000",emoji:"🧠"},
+  {title:"Shutter Island",year:"2010",emoji:"🏝️"},
+  {title:"Tenet",year:"2020",emoji:"⏪"},
+  {title:"Arrival",year:"2016",emoji:"🛸"},
+];
+
+function makeCard(m){
+  return `
+    <div class="movie-card">
+      <div class="emoji">${m.emoji}</div>
+      <div class="m-title">${m.title}</div>
+      <div class="m-year">${m.year}</div>
+    </div>`;
+}
+
+function renderRow(id, list){
+  document.getElementById(id).innerHTML = list.map(makeCard).join('');
+}
+
+function doSearch(){
+  const val = document.getElementById('searchInput').value.trim();
+  if(!val){ alert('Please enter a movie name!'); return; }
+  document.getElementById('searchLabel').textContent = val;
+  document.getElementById('searchSection').style.display = 'block';
+  renderRow('searchResults', fakeResults);
+  document.getElementById('searchSection').scrollIntoView({behavior:'smooth'});
+}
+
+document.getElementById('searchInput').addEventListener('keypress', function(e){
+  if(e.key === 'Enter') doSearch();
+});
+
+renderRow('englishRow', data.english);
+renderRow('horrorRow', data.horror);
+renderRow('romanticRow', data.romantic);
+renderRow('actionRow', data.action);
+</script>
+
+</body>
+</html>

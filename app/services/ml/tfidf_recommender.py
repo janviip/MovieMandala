@@ -202,16 +202,36 @@ class MovieRecommender:
 
         row = self.catalog_.iloc[index]
 
+        genres_value = row.get("genres")
+        if genres_value is None or (np.isscalar(genres_value) and pd.isna(genres_value)):
+            genres_tuple: tuple[str, ...] = ()
+        else:
+            genres_tuple = tuple(genres_value)
+
+        vote_average_value = row.get("vote_average")
+        vote_average = (
+            float(vote_average_value)
+            if vote_average_value is not None and not pd.isna(vote_average_value)
+            else 0.0
+        )
+
+        popularity_value = row.get("popularity")
+        popularity = (
+            float(popularity_value)
+            if popularity_value is not None and not pd.isna(popularity_value)
+            else 0.0
+        )
+
         return RecommendationResult(
             tmdb_id=int(row["tmdb_id"]),
             title=str(row["title"]),
             score=round(float(score), 6),
             overview=str(row.get("overview", "")),
             release_date=str(row.get("release_date", "")),
-            genres=tuple(row.get("genres", ()) or ()),
+            genres=genres_tuple,
             poster_path=row.get("poster_path"),
-            vote_average=float(row.get("vote_average", 0.0) or 0.0),
-            popularity=float(row.get("popularity", 0.0) or 0.0),
+            vote_average=vote_average,
+            popularity=popularity,
         )
 
     def save(self, artifact_dir: str | Path) -> None:

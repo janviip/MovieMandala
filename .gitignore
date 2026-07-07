@@ -1,16 +1,31 @@
-# Python-generated files
-__pycache__/
-*.py[oc]
-build/
-dist/
-wheels/
-*.egg-info
 
-# Virtual environments
-.venv
-
-# Local environment files
+# Environment & secrets
 .env
 
-# Local databases
+# Local sqlite db (if used for local testing)
 *.db
+
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+.venv/
+venv/
+env/
+
+# Editor
+.vscode/
+.idea/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Build
+dist/
+build/
+*.egg-info/
+
+# uv / pip
+uv.lock
+*.lock
