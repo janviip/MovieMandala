@@ -1,67 +1,185 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Movie Mandala - Login</title>
-  <link rel="stylesheet" href="/static/css/style.css" />
+
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+
+<title>Movie Mandala - Login</title>
+
+<link rel="stylesheet" href="/static/css/style.css" />
+
 </head>
+
+
 <body>
 
-  <!-- ===== NAVBAR ===== -->
-  <nav class="navbar">
-    <div class="brand">
-      <img src="/static/assets/logo.png" class="navbar-logo" alt ="Movie Mandala logo" />
-      <span class="brand-name">Movie Mandala</span>
-    </div>
-    <div class="nav-links">
-      <a href="/result">Home</a>
-      <a href="/about">About Us</a>
-      <a href="/signup" class="btn-nav">Sign Up</a>
-    </div>
-  </nav>
 
-  <!-- ===== LOGIN PAGE ===== -->
-  <div class="auth-bg">
-    <div class="auth-card">
+<!-- NAVBAR -->
 
-      <div class="auth-logo">
-        <img src="/static/assets/logo.png" class="auth-logo-img" alt="Movie Mandala logo" />
-        <h2>Login</h2>
-        
-      </div>
+<nav class="navbar">
 
-      <div class="form-group">
-        <label>Email</label>
-        <input type="email" placeholder="Enter your email" />
-      </div>
+<div class="brand">
 
-      <div class="form-group">
-        <label>Password</label>
-        <input type="password" placeholder="Enter your password" />
-      </div>
+<img 
+src="/static/assets/logo.png"
+class="navbar-logo"
+alt="Movie Mandala logo" />
 
-      <p class="forgot">Forgot password?</p>
+<span class="brand-name">
+Movie Mandala
+</span>
 
-      <button class="btn-primary" onclick="window.location.href='/result'">
-        Login
-      </button>
+</div>
 
-      <div class="divider">or</div>
 
-      <button class="btn-google">
-        🌐 Continue with Google
-      </button>
 
-      <p class="switch-link">
-        Don't have an account?
-        <a href="/signup">Sign Up</a>
-      </p>
+<div class="nav-links">
 
-    </div>
-  </div>
+<a href="/result">
+Home
+</a>
 
-  <script src="/static/js/app.js"></script>
+<a href="/about">
+About Us
+</a>
 
+<a href="/signup" class="btn-nav">
+Sign Up
+</a>
+
+</div>
+
+
+</nav>
+<!-- LOGIN -->
+
+<div class="auth-bg">
+<div class="auth-card">
+<div class="auth-logo">
+<img 
+src="/static/assets/logo.png"
+class="auth-logo-img"
+alt="Movie Mandala logo" />
+
+
+<h2>
+Login
+</h2>
+</div>
+<div class="form-group">
+
+<label>
+Email
+</label>
+
+
+<input 
+id="email"
+type="email"
+placeholder="Enter your email">
+
+
+</div>
+<div class="form-group">
+
+<label>
+Password
+</label>
+
+
+<input 
+id="password"
+type="password"
+placeholder="Enter your password">
+
+
+</div>
+<p id="errorMessage" style="color:red;"></p>
+
+
+<button 
+class="btn-primary"
+onclick="loginUser()">
+Login
+</button>
+
+<div class="divider">
+or
+</div>
+<button class="btn-google">
+
+🌐 Continue with Google
+
+</button>
+<p class="switch-link">
+
+Don't have an account?
+
+<a href="/signup">
+Sign Up
+</a>
+
+</p>
+</div>
+</div>
+<script>
+async function loginUser(){
+const email =
+document.getElementById("email").value;
+const password =
+document.getElementById("password").value;
+
+if(!email || !password){
+
+document.getElementById("errorMessage").innerHTML =
+"Please enter email and password";
+
+return;
+}
+try{
+const response =
+await fetch(
+"http://127.0.0.1:8000/login",
+{
+method:"POST",
+headers:{
+"Content-Type":"application/json"
+},
+body:JSON.stringify({
+
+email:email,
+
+password:password
+
+})
+
+
+}
+);
+const data =
+await response.json();
+if(!response.ok){
+document.getElementById("errorMessage").innerHTML =
+data.detail || "Login failed";
+return;
+}
+// SAVE JWT TOKEN
+
+localStorage.setItem(
+"token",
+data.access_token
+);
+alert("Login successful!");
+window.location.href="/result";
+}
+catch(error){
+console.error(error);
+document.getElementById("errorMessage").innerHTML =
+"Server error";
+}
+}
+</script>
 </body>
 </html>

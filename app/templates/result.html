@@ -1,148 +1,489 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8"/>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Movie Mandala - Home</title>
-  <link rel="stylesheet" href="/static/css/style.css" />
-  <link rel="stylesheet" href="/static/css/home.css" />
-  
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Movie Mandala - Home</title>
+<link rel="stylesheet" href="/static/css/style.css" />
+<link rel="stylesheet" href="/static/css/home.css" />
+<style>
+body{
+    background:#0f0f0f;
+    color:white;
+}
+/* HERO */
+.hero{
+    text-align:center;
+    padding:60px 20px;
+}
+.search-wrap{
+    margin-top:25px;
+}
+#searchInput{
+
+    width:350px;
+    padding:14px 20px;
+    border-radius:30px;
+    border:none;
+    outline:none;
+    font-size:16px;
+
+}
+.search-wrap button{
+
+    padding:14px 28px;
+    margin-left:10px;
+    border-radius:30px;
+    border:none;
+    cursor:pointer;
+
+}
+/* MOVIE SECTION */
+.genre-section{
+
+    padding:30px;
+
+}
+.genre-title{
+
+    font-size:26px;
+    font-weight:bold;
+    margin-bottom:25px;
+
+}
+.cards-row{
+
+    display:flex;
+    gap:25px;
+    overflow-x:auto;
+    padding-bottom:20px;
+
+}
+/* MOVIE CARD */
+.movie-card{
+
+    min-width:180px;
+    background:#1b1b1b;
+    border-radius:15px;
+    overflow:hidden;
+    transition:0.3s;
+
+}
+.movie-card:hover{
+
+    transform:translateY(-8px);
+
+}
+.movie-poster{
+
+    width:180px;
+    height:260px;
+    object-fit:cover;
+
+}
+.movie-info{
+
+    padding:12px;
+
+}
+.movie-title{
+
+    font-size:16px;
+    font-weight:bold;
+
+}
+.movie-details{
+
+    margin-top:8px;
+    font-size:14px;
+    color:#cccccc;
+}
+.message{
+
+    color:#aaa;
+    font-size:18px;
+
+}
+</style>
 </head>
 <body>
-
 <!-- NAVBAR -->
 <nav class="navbar">
-  <div class="brand">
-    <img src="/static/assets/logo.png" class="navbar-logo" alt="Movie Mandala logo" />
-    <span class="brand-name">Movie Mandala</span>
-  </div>
-  <div class="nav-links">
-    <a href="/result">Home</a>
-    <a href="/about">About Us</a>
-    <button class="btn-signin" onclick="window.location.href='/login'">Sign In</button>
-  </div>
+<div class="brand">
+<img 
+src="/static/assets/logo.png"
+class="navbar-logo"
+alt="Movie Mandala Logo">
+<span class="brand-name">
+Movie Mandala
+</span>
+</div>
+<div class="nav-links">
+<a href="/result">
+Home
+</a>
+<a href="/about">
+About Us
+</a>
+<button 
+class="btn-signin"
+onclick="window.location.href='/login'">
+Sign In
+</button>
+</div>
 </nav>
-
 <!-- HERO -->
-<div class="hero">
-  <h1>Find movies you'll <span>love</span></h1>
-  <p>Tell us a movie you like, and we'll find similar ones.</p>
-  <div class="search-wrap">
-    <input type="text" id="searchInput" placeholder="Try Inception, Titanic, Avatar..." />
-    <button onclick="doSearch()">Search</button>
-  </div>
+<section class="hero">
+<h1>
+Find movies you'll <span>love</span>
+</h1>
+
+
+<p>
+Search a movie and discover similar movies.
+</p>
+<div class="search-wrap">
+
+
+<input
+
+type="text"
+
+id="searchInput"
+
+placeholder="Try Avatar, Titanic, Inception..."
+
+>
+<button onclick="searchMovies()">
+
+Search
+
+</button>
+</div>
+</section>
+
+<!-- TRENDING MOVIES -->
+
+<section class="genre-section">
+
+<div class="genre-title">
+🔥 Trending Movies
 </div>
 
-<!-- SECTIONS -->
-<div class="sections">
 
-  <!-- SEARCH RESULTS -->
-  <div class="genre-section" id="searchSection">
-    <div class="genre-title">Results for: <span id="searchLabel"></span></div>
-    <div class="cards-row" id="searchResults"></div>
-  </div>
-
-  <div class="genre-section">
-    <div class="genre-title">English Movies</div>
-    <div class="cards-row" id="englishRow"></div>
-  </div>
-
-  <div class="genre-section">
-    <div class="genre-title">Horror Movies</div>
-    <div class="cards-row" id="horrorRow"></div>
-  </div>
-
-  <div class="genre-section">
-    <div class="genre-title">Romantic Movies</div>
-    <div class="cards-row" id="romanticRow"></div>
-  </div>
-
-  <div class="genre-section">
-    <div class="genre-title">Action Movies</div>
-    <div class="cards-row" id="actionRow"></div>
-  </div>
+<div 
+class="cards-row"
+id="trendingMovies">
 
 </div>
 
+
+</section>
+
+<!-- POPULAR MOVIES -->
+
+<section class="genre-section">
+
+<div class="genre-title">
+⭐ Popular Movies
+</div>
+
+<div 
+class="cards-row"
+id="popularMovies">
+
+</div>
+
+</section>
+
+<!-- RESULTS -->
+<section 
+class="genre-section"
+id="resultSection"
+style="display:none;">
+<div class="genre-title">
+
+Results for:
+<span id="searchName"></span>
+
+</div>
+<div 
+class="cards-row"
+id="movieContainer">
+</div>
+</section>
 <script>
-const data = {
-  english:[
-    {title:"Inception",year:"2010",emoji:"🌀"},
-    {title:"Interstellar",year:"2014",emoji:"🚀"},
-    {title:"The Dark Knight",year:"2008",emoji:"🦇"},
-    {title:"Avatar",year:"2009",emoji:"🌿"},
-    {title:"Avengers",year:"2019",emoji:"⚡"},
-    {title:"Oppenheimer",year:"2023",emoji:"💥"},
-    {title:"Dune",year:"2021",emoji:"🏜️"},
-  ],
-  horror:[
-    {title:"The Conjuring",year:"2013",emoji:"👻"},
-    {title:"Hereditary",year:"2018",emoji:"🕯️"},
-    {title:"It",year:"2017",emoji:"🎈"},
-    {title:"Insidious",year:"2010",emoji:"😱"},
-    {title:"Sinister",year:"2012",emoji:"🎥"},
-    {title:"Get Out",year:"2017",emoji:"🚪"},
-    {title:"A Quiet Place",year:"2018",emoji:"🤫"},
-  ],
-  romantic:[
-    {title:"Titanic",year:"1997",emoji:"🚢"},
-    {title:"The Notebook",year:"2004",emoji:"💌"},
-    {title:"La La Land",year:"2016",emoji:"🎵"},
-    {title:"About Time",year:"2013",emoji:"⏳"},
-    {title:"Me Before You",year:"2016",emoji:"💛"},
-    {title:"Pride & Prejudice",year:"2005",emoji:"🌹"},
-    {title:"Crazy Rich Asians",year:"2018",emoji:"💎"},
-  ],
-  action:[
-    {title:"Mad Max",year:"2015",emoji:"🏎️"},
-    {title:"John Wick",year:"2014",emoji:"🔫"},
-    {title:"Top Gun",year:"2022",emoji:"✈️"},
-    {title:"Mission Impossible",year:"2023",emoji:"🕵️"},
-    {title:"Spider-Man",year:"2021",emoji:"🕷️"},
-    {title:"Black Panther",year:"2018",emoji:"🐾"},
-    {title:"Thor",year:"2022",emoji:"⚡"},
-  ]
-};
+const API_URL = "http://127.0.0.1:8000";
+function createMovieCard(movie){
 
-const fakeResults = [
-  {title:"The Prestige",year:"2006",emoji:"🎩"},
-  {title:"Memento",year:"2000",emoji:"🧠"},
-  {title:"Shutter Island",year:"2010",emoji:"🏝️"},
-  {title:"Tenet",year:"2020",emoji:"⏪"},
-  {title:"Arrival",year:"2016",emoji:"🛸"},
+
+let poster = movie.poster_url;
+
+
+if(!poster){
+
+poster =
+"https://via.placeholder.com/180x260?text=No+Poster";
+
+}
+return `
+<div class="movie-card">
+<img
+
+src="${poster}"
+
+class="movie-poster"
+
+alt="${movie.title}"
+
+onerror="this.src='https://via.placeholder.com/180x260?text=No+Poster'"
+
+>
+<div class="movie-info">
+<div class="movie-title">
+${movie.title}
+</div>
+<div class="movie-details">
+📅 ${movie.release_date || "Unknown"}
+<br>
+⭐ ${movie.vote_average || "N/A"}
+</div>
+</div>
+</div>
+`;
+}
+async function searchMovies(){
+const searchValue =
+document
+.getElementById("searchInput")
+.value
+.trim();
+if(searchValue===""){
+alert("Please enter movie name");
+return;
+}
+const token =
+localStorage.getItem("token");
+if(!token){
+alert("Please login first");
+window.location.href="/login";
+return;
+}
+const container =
+document.getElementById("movieContainer");
+document
+.getElementById("resultSection")
+.style.display="block";
+document
+.getElementById("searchName")
+.textContent =
+searchValue;
+container.innerHTML =
+`
+<p class="message">
+Loading movies...
+</p>
+`;
+try{
+const response =
+await fetch(
+
+`${API_URL}/movies?search=${encodeURIComponent(searchValue)}`,
+{
+method:"GET",
+headers:{
+
+"Authorization":
+`Bearer ${token}`,
+"accept":
+"application/json"
+
+}
+}
+);
+if(response.status===401){
+alert("Session expired. Please login again.");
+localStorage.removeItem("token");
+window.location.href="/login";
+return;
+}
+if(!response.ok){
+throw new Error("Movie fetch failed");
+}
+const movies =
+await response.json();
+if(movies.length===0){
+container.innerHTML=
+`
+<p class="message">
+No movies found.
+</p>
+`;
+return;
+}
+container.innerHTML =
+movies
+.map(createMovieCard)
+.join("");
+}
+catch(error){
+console.error(error);
+container.innerHTML=
+`
+<p class="message">
+Unable to load movies.
+</p>
+`;
+}
+}
+document
+.getElementById("searchInput")
+.addEventListener(
+"keypress",
+function(event){
+if(event.key==="Enter"){
+searchMovies();
+}
+}
+);
+
+async function loadTrendingMovies(){
+
+
+const token = localStorage.getItem("token");
+
+
+if(!token){
+    return;
+}
+
+
+const movieNames = [
+    "Avatar",
+    "Titanic",
+    "Inception",
+    "Interstellar",
+    "Avengers",
+    "The Dark Knight",
+    "Spider-Man",
+    "Dune",
+    "Joker",
+    "Oppenheimer"
 ];
 
-function makeCard(m){
-  return `
-    <div class="movie-card">
-      <div class="emoji">${m.emoji}</div>
-      <div class="m-title">${m.title}</div>
-      <div class="m-year">${m.year}</div>
-    </div>`;
+
+async function loadPopularMovies(){
+
+
+const token = localStorage.getItem("token");
+
+
+if(!token){
+    return;
 }
 
-function renderRow(id, list){
-  document.getElementById(id).innerHTML = list.map(makeCard).join('');
+
+
+const movieNames = [
+
+    "Avatar",
+    "Inception",
+    "Titanic",
+    "Avengers",
+    "Interstellar",
+    "Joker",
+    "Dune"
+
+];
+
+
+
+let popularMovies = [];
+
+
+
+for(let movie of movieNames){
+
+
+    const response = await fetch(
+
+        `${API_URL}/movies?search=${movie}`,
+
+        {
+
+        headers:{
+            "Authorization":`Bearer ${token}`
+        }
+
+        }
+
+    );
+
+
+
+    const data = await response.json();
+
+
+
+    if(data.length > 0){
+
+        popularMovies.push(data[0]);
+
+    }
+
+
 }
 
-function doSearch(){
-  const val = document.getElementById('searchInput').value.trim();
-  if(!val){ alert('Please enter a movie name!'); return; }
-  document.getElementById('searchLabel').textContent = val;
-  document.getElementById('searchSection').style.display = 'block';
-  renderRow('searchResults', fakeResults);
-  document.getElementById('searchSection').scrollIntoView({behavior:'smooth'});
+
+
+
+document.getElementById("popularMovies").innerHTML =
+
+popularMovies
+.map(createMovieCard)
+.join("");
+
+
+
 }
 
-document.getElementById('searchInput').addEventListener('keypress', function(e){
-  if(e.key === 'Enter') doSearch();
-});
+let allMovies = [];
 
-renderRow('englishRow', data.english);
-renderRow('horrorRow', data.horror);
-renderRow('romanticRow', data.romantic);
-renderRow('actionRow', data.action);
+
+
+for(let movie of movieNames){
+
+
+    const response = await fetch(
+        `${API_URL}/movies?search=${movie}`,
+        {
+
+        headers:{
+            "Authorization":`Bearer ${token}`
+        }
+
+        }
+    );
+
+
+    const data = await response.json();
+
+
+    if(data.length > 0){
+
+        allMovies.push(data[0]);
+
+    }
+
+}
+document.getElementById("trendingMovies")
+.innerHTML =
+allMovies
+.map(createMovieCard)
+.join("");
+}
+loadTrendingMovies();
+loadPopularMovies();
 </script>
-
 </body>
 </html>

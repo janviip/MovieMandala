@@ -3,7 +3,7 @@ from jose import jwt
 from datetime import datetime, timedelta
 from app.core.config import SECRET_KEY, ALGORITHM, ACCESS_TOKEN_EXPIRE_MINUTES
 from fastapi import Depends, HTTPException
-from fastapi.security import OAuth2PasswordBearer
+from fastapi.security import HTTPBearer
 from sqlalchemy.orm import Session
 from app.core.database import get_db
 
@@ -27,9 +27,10 @@ def create_access_token(data: dict) -> str:
 
 
 
-oauth2_scheme = OAuth2PasswordBearer(tokenUrl="login")
+oauth2_scheme = HTTPBearer()
 
-def get_current_user(token: str = Depends(oauth2_scheme), db: Session = Depends(get_db)):
+def get_current_user(credentials = Depends(oauth2_scheme), db: Session = Depends(get_db)):
+    token = credentials.credentials
     try:
         payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
         user_id = payload.get("user_id")
