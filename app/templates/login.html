@@ -89,10 +89,31 @@ Password
 </label>
 
 
-<input 
-id="password"
-type="password"
-placeholder="Enter your password">
+<div style="position:relative; width:100%;">
+
+    <input
+        id="password"
+        type="password"
+        placeholder="Enter your password"
+        style="width:100%; padding-right:45px;">
+
+    <button
+        type="button"
+        id="toggleLoginPassword"
+        style="
+            position:absolute;
+            right:12px;
+            top:50%;
+            transform:translateY(-50%);
+            border:none;
+            background:none;
+            cursor:pointer;
+            font-size:18px;
+            color:#888;">
+        👁️
+    </button>
+
+</div>
 
 
 </div>
@@ -178,6 +199,31 @@ document.getElementById("errorMessage").innerHTML =
 "Server error";
 }
 }
+
+const toggleLoginPassword =
+    document.getElementById("toggleLoginPassword");
+
+const loginPassword =
+    document.getElementById("password");
+
+toggleLoginPassword.addEventListener("click", function(){
+
+    if(loginPassword.type === "password"){
+
+        loginPassword.type = "text";
+
+        toggleLoginPassword.textContent = "🙈";
+
+    }
+    else{
+
+        loginPassword.type = "password";
+
+        toggleLoginPassword.textContent = "👁️";
+
+    }
+
+});
 </script>
 </body>
 </html>
