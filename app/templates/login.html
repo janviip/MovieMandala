@@ -167,10 +167,8 @@ return;
 }
 // SAVE JWT TOKEN
 
-localStorage.setItem(
-"token",
-data.access_token
-);
+localStorage.setItem("token", data.access_token);
+localStorage.setItem("username", data.username);
 alert("Login successful!");
 window.location.href="/result";
 }

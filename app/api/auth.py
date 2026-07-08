@@ -17,7 +17,12 @@ def signup(user_data: UserCreate, db: Session = Depends(get_db)):
 
 @router.post("/login", response_model=Token)
 def login(login_data: UserLogin, db: Session = Depends(get_db)):
-    token = login_user(db, login_data)
-    if token is None:
-        raise HTTPException(status_code=401, detail="Invalid email or password")
-    return {"access_token": token, "token_type": "bearer"}
+    result = login_user(db, login_data)
+
+    if result is None:
+        raise HTTPException(
+            status_code=401,
+            detail="Invalid email or password"
+        )
+
+    return result

@@ -15,11 +15,12 @@ def load_recommender():
         print(f"⚠️ ML recommender not available yet: {e}")
         recommender = None
 
-def get_recommendations(tmdb_id: int, k: int = 10):
+def get_recommendations(movie_title: str, k: int = 10):
     if recommender is None:
         return []
+
     try:
-        return recommender.recommend_by_tmdb_id(tmdb_id, k=k)
+        return recommender.recommend_by_title(movie_title, k=k)
     except Exception as e:
         print(f"Recommendation error: {e}")
         return []

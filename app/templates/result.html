@@ -20,89 +20,66 @@ body{
     margin-top:25px;
 }
 #searchInput{
-
     width:350px;
     padding:14px 20px;
     border-radius:30px;
     border:none;
     outline:none;
     font-size:16px;
-
 }
 .search-wrap button{
-
     padding:14px 28px;
     margin-left:10px;
     border-radius:30px;
     border:none;
     cursor:pointer;
-
 }
 /* MOVIE SECTION */
 .genre-section{
-
     padding:30px;
-
 }
 .genre-title{
-
     font-size:26px;
     font-weight:bold;
     margin-bottom:25px;
-
 }
 .cards-row{
-
     display:flex;
     gap:25px;
     overflow-x:auto;
     padding-bottom:20px;
-
 }
 /* MOVIE CARD */
 .movie-card{
-
     min-width:180px;
     background:#1b1b1b;
     border-radius:15px;
     overflow:hidden;
     transition:0.3s;
-
 }
 .movie-card:hover{
-
     transform:translateY(-8px);
-
 }
 .movie-poster{
-
     width:180px;
     height:260px;
     object-fit:cover;
-
 }
 .movie-info{
-
     padding:12px;
-
 }
 .movie-title{
-
     font-size:16px;
     font-weight:bold;
-
 }
 .movie-details{
-
     margin-top:8px;
     font-size:14px;
     color:#cccccc;
 }
 .message{
-
     color:#aaa;
     font-size:18px;
-
 }
 </style>
 </head>
@@ -125,11 +102,21 @@ Home
 <a href="/about">
 About Us
 </a>
-<button 
-class="btn-signin"
-onclick="window.location.href='/login'">
-Sign In
-</button>
+<div class="user-menu" id="userMenu">
+
+    <button id="authButton" class="btn-signin">
+        Sign In
+    </button>
+
+    <div class="dropdown" id="dropdownMenu">
+
+        <a href="#">👤 My Profile</a>
+
+        <a href="#" id="logoutBtn">🚪 Logout</a>
+
+    </div>
+
+</div>
 </div>
 </nav>
 <!-- HERO -->
@@ -138,62 +125,41 @@ Sign In
 Find movies you'll <span>love</span>
 </h1>
 
-
 <p>
 Search a movie and discover similar movies.
 </p>
 <div class="search-wrap">
-
-
 <input
-
 type="text"
-
 id="searchInput"
-
 placeholder="Try Avatar, Titanic, Inception..."
-
 >
 <button onclick="searchMovies()">
-
 Search
-
 </button>
 </div>
 </section>
 
 <!-- TRENDING MOVIES -->
-
 <section class="genre-section">
-
 <div class="genre-title">
 🔥 Trending Movies
 </div>
-
-
 <div 
 class="cards-row"
 id="trendingMovies">
-
 </div>
-
-
 </section>
 
 <!-- POPULAR MOVIES -->
-
 <section class="genre-section">
-
 <div class="genre-title">
 ⭐ Popular Movies
 </div>
-
 <div 
 class="cards-row"
 id="popularMovies">
-
 </div>
-
 </section>
 
 <!-- RESULTS -->
@@ -202,10 +168,8 @@ class="genre-section"
 id="resultSection"
 style="display:none;">
 <div class="genre-title">
-
 Results for:
 <span id="searchName"></span>
-
 </div>
 <div 
 class="cards-row"
@@ -214,44 +178,58 @@ id="movieContainer">
 </section>
 <script>
 const API_URL = "http://127.0.0.1:8000";
-function createMovieCard(movie){
+const POSTER_BASE = "https://image.tmdb.org/t/p/w500";
+const PLACEHOLDER = "https://via.placeholder.com/180x260?text=No+Poster";
 
+// `/movies` returns {movie_id, poster_url}; `/recommend/{id}` returns
+// {tmdb_id, poster_path}. Normalize both shapes into one card format.
+function normalizeMovie(movie){
+    const id = movie.movie_id ?? movie.tmdb_id;
 
-let poster = movie.poster_url;
+    let poster = movie.poster_url || null;
+    if(!poster && movie.poster_path){
+        poster = `${POSTER_BASE}${movie.poster_path}`;
+    }
 
-
-if(!poster){
-
-poster =
-"https://via.placeholder.com/180x260?text=No+Poster";
-
+    return {
+        id: id,
+        title: movie.title,
+        poster: poster || PLACEHOLDER,
+        release_date: movie.release_date || "Unknown",
+        vote_average: movie.vote_average || "N/A"
+    };
 }
-return `
-<div class="movie-card">
+
+function createMovieCard(rawMovie){
+    const movie = normalizeMovie(rawMovie);
+    return `
+<div class="movie-card" onclick="goToRecommendations(${movie.id})" style="cursor:pointer;">
 <img
-
-src="${poster}"
-
+src="${movie.poster}"
 class="movie-poster"
-
 alt="${movie.title}"
-
-onerror="this.src='https://via.placeholder.com/180x260?text=No+Poster'"
-
+onerror="this.src='${PLACEHOLDER}'"
 >
 <div class="movie-info">
 <div class="movie-title">
 ${movie.title}
 </div>
 <div class="movie-details">
-📅 ${movie.release_date || "Unknown"}
+📅 ${movie.release_date}
 <br>
-⭐ ${movie.vote_average || "N/A"}
+⭐ ${movie.vote_average}
 </div>
 </div>
 </div>
 `;
 }
+
+// Clicking any movie card navigates here with the movie's id, so the
+// recommendations section can load on page load (see loadRecommendationsFromURL below).
+function goToRecommendations(movieId){
+    window.location.href = `/result?movie_id=${movieId}`;
+}
+
 async function searchMovies(){
 const searchValue =
 document
@@ -287,17 +265,14 @@ Loading movies...
 try{
 const response =
 await fetch(
-
 `${API_URL}/movies?search=${encodeURIComponent(searchValue)}`,
 {
 method:"GET",
 headers:{
-
 "Authorization":
 `Bearer ${token}`,
 "accept":
 "application/json"
-
 }
 }
 );
@@ -347,143 +322,219 @@ searchMovies();
 }
 );
 
-async function loadTrendingMovies(){
+// Helper: look up the first search match for each name in a list,
+// used by both the trending and popular rows below.
+async function fetchMoviesByName(token, movieNames){
+    const results = [];
 
+    for(let movie of movieNames){
+        const response = await fetch(
+            `${API_URL}/movies?search=${encodeURIComponent(movie)}`,
+            {
+                headers:{
+                    "Authorization":`Bearer ${token}`
+                }
+            }
+        );
 
-const token = localStorage.getItem("token");
+        if(!response.ok){
+            continue; // skip a bad lookup instead of breaking the whole row
+        }
 
+        const data = await response.json();
+        if(data.length > 0){
+            results.push(data[0]);
+        }
+    }
 
-if(!token){
-    return;
+    return results;
 }
 
+async function loadTrendingMovies(){
+    const token = localStorage.getItem("token");
+    if(!token){
+        return;
+    }
 
-const movieNames = [
-    "Avatar",
-    "Titanic",
-    "Inception",
-    "Interstellar",
-    "Avengers",
-    "The Dark Knight",
-    "Spider-Man",
-    "Dune",
-    "Joker",
-    "Oppenheimer"
-];
+    const movieNames = [
+        "Avatar",
+        "Titanic",
+        "Inception",
+        "Interstellar",
+        "Avengers",
+        "The Dark Knight",
+        "Spider-Man",
+        "Dune",
+        "Joker",
+        "Oppenheimer"
+    ];
 
+    const allMovies = await fetchMoviesByName(token, movieNames);
+    document.getElementById("trendingMovies").innerHTML =
+        allMovies.map(createMovieCard).join("");
+}
 
 async function loadPopularMovies(){
+    const token = localStorage.getItem("token");
+    if(!token){
+        return;
+    }
 
+    const movieNames = [
+        "Avatar",
+        "Inception",
+        "Titanic",
+        "Avengers",
+        "Interstellar",
+        "Joker",
+        "Dune"
+    ];
 
-const token = localStorage.getItem("token");
-
-
-if(!token){
-    return;
+    const popularMovies = await fetchMoviesByName(token, movieNames);
+    document.getElementById("popularMovies").innerHTML =
+        popularMovies.map(createMovieCard).join("");
 }
 
+// ---- Recommendations (the core "search a movie, get similar movies" flow) ----
 
+async function loadRecommendations(movieId){
+    const token = localStorage.getItem("token");
+    if(!token){
+        alert("Please login first");
+        window.location.href = "/login";
+        return;
+    }
 
-const movieNames = [
+    const container = document.getElementById("movieContainer");
+    const resultSection = document.getElementById("resultSection");
+    resultSection.style.display = "block";
+    container.innerHTML = `<p class="message">Loading recommendations...</p>`;
 
-    "Avatar",
-    "Inception",
-    "Titanic",
-    "Avengers",
-    "Interstellar",
-    "Joker",
-    "Dune"
+    try{
+        // Fetch the source movie so we can show its title in the heading.
+        const movieResponse = await fetch(
+            `${API_URL}/movies/${movieId}`,
+            { headers: { "Authorization": `Bearer ${token}` } }
+        );
 
-];
-
-
-
-let popularMovies = [];
-
-
-
-for(let movie of movieNames){
-
-
-    const response = await fetch(
-
-        `${API_URL}/movies?search=${movie}`,
-
-        {
-
-        headers:{
-            "Authorization":`Bearer ${token}`
+        if(movieResponse.status === 401){
+            alert("Session expired. Please login again.");
+            localStorage.removeItem("token");
+            window.location.href = "/login";
+            return;
         }
 
+        if(movieResponse.ok){
+            const sourceMovie = await movieResponse.json();
+            document.getElementById("searchName").textContent =
+                `Movies similar to "${sourceMovie.title}"`;
+        } else {
+            document.getElementById("searchName").textContent = "Recommendations";
         }
 
-    );
+        const recResponse = await fetch(
+            `${API_URL}/recommend/${movieId}`,
+            { headers: { "Authorization": `Bearer ${token}` } }
+        );
 
+        if(recResponse.status === 401){
+            alert("Session expired. Please login again.");
+            localStorage.removeItem("token");
+            window.location.href = "/login";
+            return;
+        }
 
+        if(!recResponse.ok){
+            container.innerHTML = `<p class="message">No recommendations found for this movie.</p>`;
+            return;
+        }
 
-    const data = await response.json();
+        const recommendations = await recResponse.json();
+        if(recommendations.length === 0){
+            container.innerHTML = `<p class="message">No recommendations found.</p>`;
+            return;
+        }
 
+        container.innerHTML = recommendations.map(createMovieCard).join("");
+    }
+    catch(error){
+        console.error(error);
+        container.innerHTML = `<p class="message">Unable to load recommendations.</p>`;
+    }
+}
 
+// If the page was opened as /result?movie_id=123 (from clicking a card),
+// load recommendations for that movie instead of / in addition to the
+// trending & popular rows.
+function loadRecommendationsFromURL(){
+    const params = new URLSearchParams(window.location.search);
+    const movieId = params.get("movie_id");
+    if(movieId){
+        loadRecommendations(movieId);
+    }
+}
+function updateNavbar(){
 
-    if(data.length > 0){
+    const token = localStorage.getItem("token");
+    const username = localStorage.getItem("username");
 
-        popularMovies.push(data[0]);
+    const button = document.getElementById("authButton");
+    const dropdown = document.getElementById("dropdownMenu");
+
+    if(token){
+
+        button.innerHTML = `👤 ${username} ▼`;
+
+        button.onclick = function(e){
+            e.stopPropagation();
+            dropdown.classList.toggle("show");
+        };
+
+    }
+    else{
+
+        button.innerHTML = "Sign In";
+
+        button.onclick = function(){
+            window.location.href="/login";
+        };
 
     }
 
-
 }
+document.getElementById("logoutBtn").onclick = function(e){
 
+    e.preventDefault();
 
+    localStorage.removeItem("token");
+    localStorage.removeItem("username");
 
+    window.location.href="/login";
 
-document.getElementById("popularMovies").innerHTML =
+};
+window.addEventListener("click", function(e){
 
-popularMovies
-.map(createMovieCard)
-.join("");
+    const dropdown = document.getElementById("dropdownMenu");
 
-
-
-}
-
-let allMovies = [];
-
-
-
-for(let movie of movieNames){
-
-
-    const response = await fetch(
-        `${API_URL}/movies?search=${movie}`,
-        {
-
-        headers:{
-            "Authorization":`Bearer ${token}`
-        }
-
-        }
-    );
-
-
-    const data = await response.json();
-
-
-    if(data.length > 0){
-
-        allMovies.push(data[0]);
-
+    if(
+        !document.getElementById("userMenu").contains(e.target)
+    ){
+        dropdown.classList.remove("show");
     }
 
-}
-document.getElementById("trendingMovies")
-.innerHTML =
-allMovies
-.map(createMovieCard)
-.join("");
-}
-loadTrendingMovies();
-loadPopularMovies();
+});
+window.onload = function(){
+
+    updateNavbar();
+
+    loadTrendingMovies();
+
+    loadPopularMovies();
+
+    loadRecommendationsFromURL();
+
+};
+
 </script>
 </body>
 </html>
