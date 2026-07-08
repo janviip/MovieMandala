@@ -139,7 +139,20 @@ Search
 </button>
 </div>
 </section>
-
+<!-- RESULTS -->
+<section 
+class="genre-section"
+id="resultSection"
+style="display:none;">
+<div class="genre-title">
+Results for:
+<span id="searchName"></span>
+</div>
+<div 
+class="cards-row"
+id="movieContainer">
+</div>
+</section>
 <!-- TRENDING MOVIES -->
 <section class="genre-section">
 <div class="genre-title">
@@ -162,23 +175,10 @@ id="popularMovies">
 </div>
 </section>
 
-<!-- RESULTS -->
-<section 
-class="genre-section"
-id="resultSection"
-style="display:none;">
-<div class="genre-title">
-Results for:
-<span id="searchName"></span>
-</div>
-<div 
-class="cards-row"
-id="movieContainer">
-</div>
-</section>
+
 <script>
 const API_URL = "http://127.0.0.1:8000";
-const POSTER_BASE = "https://image.tmdb.org/t/p/w500";
+const POSTER_BASE = "https://image.tmdb.org/t/p/w300";
 const PLACEHOLDER = "https://via.placeholder.com/180x260?text=No+Poster";
 
 // `/movies` returns {movie_id, poster_url}; `/recommend/{id}` returns
@@ -208,6 +208,8 @@ function createMovieCard(rawMovie){
 src="${movie.poster}"
 class="movie-poster"
 alt="${movie.title}"
+loading="lazy"
+onload="this.classList.add('loaded')"
 onerror="this.src='${PLACEHOLDER}'"
 >
 <div class="movie-info">
@@ -483,8 +485,13 @@ function updateNavbar(){
 
     if(token){
 
-        button.innerHTML = `👤 ${username} ▼`;
+        const firstLetter = username ? username.charAt(0).toUpperCase() : "U";
 
+        button.innerHTML = `
+        <div class="avatar-circle">
+        ${firstLetter}
+</div>
+`;
         button.onclick = function(e){
             e.stopPropagation();
             dropdown.classList.toggle("show");

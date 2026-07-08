@@ -107,3 +107,55 @@ body{
 .show{
     display: block;
 }
+.movie-poster{
+    opacity: 0;
+    transition: opacity .4s ease;
+}
+
+.movie-poster.loaded{
+    opacity: 1;
+}
+
+/* User Avatar */
+
+.avatar-circle{
+    width:42px;
+    height:42px;
+
+    border-radius:50%;
+
+    background:#e50914;
+
+    color:white;
+
+    display:flex;
+
+    justify-content:center;
+
+    align-items:center;
+
+    font-size:18px;
+
+    font-weight:bold;
+
+    cursor:pointer;
+
+    transition:.25s;
+}
+
+.avatar-circle:hover{
+
+    transform:scale(1.08);
+
+    background:#ff1d2d;
+}
+
+.user-menu .btn-signin{
+    width:44px;
+    height:44px;
+    padding:0;
+    border-radius:50%;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+}
