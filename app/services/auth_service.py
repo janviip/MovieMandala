@@ -45,3 +45,36 @@ def login_user(db: Session, login_data: UserLogin):
         "token_type": "bearer",
         "username": user.username
     }
+
+def change_password(db: Session, user: User, current_password: str, new_password: str, confirm_password: str):
+
+    # Check current password
+    if not verify_password(current_password, user.password_hash):
+        return {
+            "success": False,
+            "message": "Current password is incorrect."
+        }
+
+    # Check confirmation
+    if new_password != confirm_password:
+        return {
+            "success": False,
+            "message": "New passwords do not match."
+        }
+
+    # Prevent using the same password
+    if verify_password(new_password, user.password_hash):
+        return {
+            "success": False,
+            "message": "New password must be different from the current password."
+        }
+
+    # Update password
+    user.password_hash = hash_password(new_password)
+
+    db.commit()
+
+    return {
+        "success": True,
+        "message": "Password changed successfully."
+    }

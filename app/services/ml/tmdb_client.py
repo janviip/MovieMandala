@@ -1,9 +1,14 @@
 from __future__ import annotations
 
 import os
+from dotenv import load_dotenv
+
+load_dotenv()
 import time
 from dataclasses import dataclass
 from typing import Any
+
+from app.core.config import TMDB_API_KEY
 
 import httpx
 
@@ -21,9 +26,9 @@ class TMDBClientConfig:
     request_sleep_seconds: float = 0.25
 
     @classmethod
-    def from_env(cls) -> "TMDBClientConfig":
+    def from_env(cls):
         return cls(
-            api_key=os.getenv("TMDB_API_KEY"),
+            api_key=TMDB_API_KEY,
             read_token=os.getenv("TMDB_API_READ_TOKEN"),
         )
 

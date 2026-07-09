@@ -352,24 +352,20 @@ searchMovies();
 
 // Helper: look up the first search match for each name in a list,
 // used by both the trending and popular rows below.
-async function fetchMoviesByName(token, movieNames){
+async function fetchMoviesByName(movieNames){
     const results = [];
 
     for(let movie of movieNames){
         const response = await fetch(
-            `${API_URL}/movies?search=${encodeURIComponent(movie)}`,
-            {
-                headers:{
-                    "Authorization":`Bearer ${token}`
-                }
-            }
+            `${API_URL}/movies?search=${encodeURIComponent(movie)}`
         );
 
         if(!response.ok){
-            continue; // skip a bad lookup instead of breaking the whole row
+            continue;
         }
 
         const data = await response.json();
+
         if(data.length > 0){
             results.push(data[0]);
         }
@@ -379,10 +375,7 @@ async function fetchMoviesByName(token, movieNames){
 }
 
 async function loadTrendingMovies(){
-    const token = localStorage.getItem("token");
-    if(!token){
-        return;
-    }
+    
 
     const movieNames = [
         "Avatar",
@@ -397,16 +390,13 @@ async function loadTrendingMovies(){
         "Oppenheimer"
     ];
 
-    const allMovies = await fetchMoviesByName(token, movieNames);
+    const allMovies = await fetchMoviesByName(movieNames);
     document.getElementById("trendingMovies").innerHTML =
         allMovies.map(createMovieCard).join("");
 }
 
 async function loadPopularMovies(){
-    const token = localStorage.getItem("token");
-    if(!token){
-        return;
-    }
+    
 
     const movieNames = [
         "Avatar",
@@ -418,7 +408,7 @@ async function loadPopularMovies(){
         "Dune"
     ];
 
-    const popularMovies = await fetchMoviesByName(token, movieNames);
+    const popularMovies = await fetchMoviesByName(movieNames);
     document.getElementById("popularMovies").innerHTML =
         popularMovies.map(createMovieCard).join("");
 }

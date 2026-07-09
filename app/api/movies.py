@@ -13,8 +13,7 @@ router = APIRouter()
 @router.get("/movies", response_model=List[MovieResponse])
 def list_movies(
     search: Optional[str] = None,
-    db: Session = Depends(get_db),
-    current_user: User = Depends(get_current_user)  # 👈 protected
+    db: Session = Depends(get_db)
 ):
     return get_all_movies(db, search)
 
@@ -22,8 +21,7 @@ def list_movies(
 @router.get("/movies/{movie_id}", response_model=MovieResponse)
 def get_movie(
     movie_id: int,
-    db: Session = Depends(get_db),
-    current_user: User = Depends(get_current_user)  # 👈 protected
+    db: Session = Depends(get_db)
 ):
     movie = get_movie_by_id(db, movie_id)
     if movie is None:

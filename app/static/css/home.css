@@ -81,16 +81,39 @@ body{
 }
 
 .dropdown{
-    display: none;
-    position: absolute;
-    right: 0;
-    top: 45px;
-    min-width: 170px;
-    background: #1f1f1f;
-    border-radius: 10px;
-    overflow: hidden;
-    box-shadow: 0 8px 20px rgba(0,0,0,0.4);
-    z-index: 1000;
+    display:none;
+    position:absolute;
+    right:0;
+    top:55px;
+
+    width:280px;
+
+    background:#181818;
+    border:1px solid rgba(255,255,255,.08);
+
+    border-radius:16px;
+
+    overflow:hidden;
+
+    box-shadow:
+        0 20px 45px rgba(0,0,0,.55);
+
+    z-index:1000;
+
+    animation:dropdownFade .18s ease;
+}
+@keyframes dropdownFade{
+
+    from{
+        opacity:0;
+        transform:translateY(-8px) scale(.98);
+    }
+
+    to{
+        opacity:1;
+        transform:translateY(0) scale(1);
+    }
+
 }
 
 .dropdown a{
@@ -119,12 +142,18 @@ body{
 /* User Avatar */
 
 .avatar-circle{
-    width:42px;
-    height:42px;
+
+    width:44px;
+
+    height:44px;
 
     border-radius:50%;
 
-    background:#e50914;
+    background:linear-gradient(
+        135deg,
+        #ff3443,
+        #b10000
+    );
 
     color:white;
 
@@ -136,11 +165,12 @@ body{
 
     font-size:18px;
 
-    font-weight:bold;
+    font-weight:700;
 
-    cursor:pointer;
+    box-shadow:0 6px 18px rgba(229,9,20,.45);
 
-    transition:.25s;
+    transition:.2s;
+
 }
 
 .avatar-circle:hover{
@@ -158,4 +188,314 @@ body{
     display:flex;
     justify-content:center;
     align-items:center;
+}
+/* ---------- PROFILE DROPDOWN ---------- */
+
+.profile-header{
+
+    display:flex;
+
+    align-items:center;
+
+    gap:15px;
+
+    padding:18px;
+
+    background:linear-gradient(
+        135deg,
+        #e50914,
+        #8b0000
+    );
+
+}
+
+.profile-avatar{
+
+    width:58px;
+
+    height:58px;
+
+    border-radius:50%;
+
+    background:white;
+
+    color:#e50914;
+
+    font-size:24px;
+
+    font-weight:bold;
+
+    display:flex;
+
+    justify-content:center;
+
+    align-items:center;
+
+    flex-shrink:0;
+
+}
+
+.profile-info{
+    display:flex;
+    flex-direction:column;
+}
+
+#profileUsername{
+
+    font-size:17px;
+
+    font-weight:700;
+
+    color:white;
+
+}
+
+#profileEmail{
+
+    font-size:13px;
+
+    color:rgba(255,255,255,.82);
+
+    overflow:hidden;
+
+    text-overflow:ellipsis;
+
+}
+
+.dropdown hr{
+
+    border:none;
+
+    border-top:1px solid rgba(255,255,255,.08);
+
+}
+
+.dropdown a{
+
+    display:flex;
+
+    align-items:center;
+
+    gap:12px;
+
+    padding:15px 18px;
+
+    color:white;
+
+    text-decoration:none;
+
+    transition:.2s;
+
+    font-size:15px;
+
+}
+
+.dropdown a:hover{
+
+    background:#262626;
+
+    padding-left:24px;
+
+}
+
+/* ================= CHANGE PASSWORD MODAL ================= */
+
+.modal{
+
+    display:none;
+
+    position:fixed;
+
+    inset:0;
+
+    background:rgba(0,0,0,.75);
+
+    backdrop-filter:blur(4px);
+
+    justify-content:center;
+
+    align-items:center;
+
+    z-index:3000;
+
+}
+
+.modal-content{
+
+    width:420px;
+
+    max-width:90%;
+
+    background:#181818;
+
+    border:1px solid rgba(255,255,255,.08);
+
+    border-radius:18px;
+
+    padding:30px;
+
+    position:relative;
+
+    box-shadow:0 20px 45px rgba(0,0,0,.6);
+
+    animation:modalOpen .25s ease;
+
+}
+
+@keyframes modalOpen{
+
+    from{
+
+        opacity:0;
+
+        transform:translateY(-20px) scale(.96);
+
+    }
+
+    to{
+
+        opacity:1;
+
+        transform:translateY(0) scale(1);
+
+    }
+
+}
+
+.modal-content h2{
+
+    text-align:center;
+
+    margin-bottom:25px;
+
+    color:#fff;
+
+}
+
+.close-modal{
+
+    position:absolute;
+
+    top:15px;
+
+    right:18px;
+
+    font-size:28px;
+
+    cursor:pointer;
+
+    color:#aaa;
+
+}
+
+.close-modal:hover{
+
+    color:#fff;
+
+}
+
+.input-group{
+
+    margin-bottom:18px;
+
+}
+
+.input-group label{
+
+    display:block;
+
+    margin-bottom:8px;
+
+    font-size:14px;
+
+    color:#ddd;
+
+}
+
+.input-group input{
+
+    width:100%;
+
+    padding:12px 14px;
+
+    border-radius:10px;
+
+    border:1px solid #333;
+
+    background:#252525;
+
+    color:white;
+
+    font-size:15px;
+
+    outline:none;
+
+}
+
+.input-group input:focus{
+
+    border-color:#e50914;
+
+}
+
+.modal-buttons{
+
+    display:flex;
+
+    justify-content:space-between;
+
+    gap:12px;
+
+    margin-top:25px;
+
+}
+
+.cancel-btn{
+
+    flex:1;
+
+    background:#333;
+
+    color:white;
+
+    border:none;
+
+    padding:12px;
+
+    border-radius:10px;
+
+    cursor:pointer;
+
+}
+
+.cancel-btn:hover{
+
+    background:#444;
+
+}
+
+.save-btn{
+
+    flex:1;
+
+    background:#e50914;
+
+    color:white;
+
+    border:none;
+
+    padding:12px;
+
+    border-radius:10px;
+
+    cursor:pointer;
+
+    font-weight:600;
+
+}
+
+.save-btn:hover{
+
+    background:#c40812;
+
 }
