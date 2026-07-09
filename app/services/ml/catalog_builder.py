@@ -6,8 +6,8 @@ from typing import Iterable, Any
 import pandas as pd
 from tqdm import tqdm
 
-from ...domain.movie_features import MovieFeatureRecord
-from .tmdb_client import TMDBClient
+from app.domain.movie_features import MovieFeatureRecord
+from app.services.ml.tmdb_client import TMDBClient
 
 
 def _safe_name_list(items: Iterable[dict[str, Any]], key: str = "name") -> tuple[str, ...]:
