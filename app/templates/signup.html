@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Movie Mandala - Sign Up</title>
+<link rel="stylesheet" href="/static/css/style.css">
+</head>
+<body>
+
+<nav class="navbar">
+<div class="brand">
+<img src="/static/assets/logo.png" class="navbar-logo" alt="Movie Mandala logo">
+<span class="brand-name">Movie Mandala</span>
+</div>
+
+<div class="nav-links">
+<a href="/result">Home</a>
+<a href="/about">About Us</a>
+<a href="/login" class="btn-nav">Login</a>
+</div>
+</nav>
+
+<div class="auth-bg">
+<div class="auth-card">
+
+<div class="auth-logo">
+<img src="/static/assets/logo.png" class="auth-logo-img" alt="Movie Mandala logo">
+<h2>Sign Up</h2>
+<p>Create your account to get started</p>
+</div>
+
+<div class="form-group">
+<label>Email</label>
+<input type="email" id="email" placeholder="Enter your email">
+</div>
+
+<div class="form-group">
+<label>Username</label>
+<input type="text" id="username" placeholder="Choose a username">
+</div>
+
+<div class="form-group">
+<label>Password</label>
+<div class="password-wrapper">
+<input type="password" id="password" placeholder="Create a password">
+<span class="toggle-password" id="togglePassword">👁️</span>
+</div>
+</div>
+
+<div class="form-group">
+<label>Confirm Password</label>
+<div class="password-wrapper">
+<input type="password" id="confirmPassword" placeholder="Repeat your password">
+<span class="toggle-password" id="toggleConfirmPassword">👁️</span>
+</div>
+</div>
+
+<p id="errorMessage" style="color:#ff6b6b;margin-bottom:12px;"></p>
+
+<button class="btn-primary" onclick="signupUser()">Create Account</button>
+
+<div class="divider">or</div>
+
+<button class="btn-google">🌐 Continue with Google</button>
+
+<p class="switch-link">
+Already have an account?
+<a href="/login">Login</a>
+</p>
+
+</div>
+</div>
+
+<script>
+function toggle(inputId, iconId){
+    const input=document.getElementById(inputId);
+    const icon=document.getElementById(iconId);
+
+    if(input.type==="password"){
+        input.type="text";
+        icon.textContent="🙈";
+    }else{
+        input.type="password";
+        icon.textContent="👁️";
+    }
+}
+
+document.getElementById("togglePassword").onclick=()=>toggle("password","togglePassword");
+document.getElementById("toggleConfirmPassword").onclick=()=>toggle("confirmPassword","toggleConfirmPassword");
+
+async function signupUser(){
+
+    const email=document.getElementById("email").value.trim();
+    const username=document.getElementById("username").value.trim();
+    const password=document.getElementById("password").value;
+    const confirm=document.getElementById("confirmPassword").value;
+    const error=document.getElementById("errorMessage");
+
+    error.textContent="";
+
+    if(!email||!username||!password||!confirm){
+        error.textContent="Please fill in all fields.";
+        return;
+    }
+
+    if(password!==confirm){
+        error.textContent="Passwords do not match.";
+        return;
+    }
+
+    try{
+        const response=await fetch("http://127.0.0.1:8000/signup",{
+            method:"POST",
+            headers:{
+                "Content-Type":"application/json"
+            },
+            body:JSON.stringify({
+                username:username,
+                email:email,
+                password:password
+            })
+        });
+
+        const data=await response.json();
+
+        if(!response.ok){
+            error.textContent=data.detail || "Signup failed.";
+            return;
+        }
+
+        alert("Account created successfully!");
+        window.location.href="/login";
+
+    }catch(e){
+        console.error(e);
+        error.textContent="Server error.";
+    }
+}
+</script>
+
+</body>
+</html>

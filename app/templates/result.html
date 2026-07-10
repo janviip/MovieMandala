@@ -1,0 +1,776 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Movie Mandala - Home</title>
+<link rel="stylesheet" href="/static/css/style.css" />
+<link rel="stylesheet" href="/static/css/home.css" />
+<style>
+body{
+    background:#0f0f0f;
+    color:white;
+}
+/* HERO */
+.hero{
+    text-align:center;
+    padding:60px 20px;
+}
+.search-wrap{
+    margin-top:25px;
+}
+#searchInput{
+    width:350px;
+    padding:14px 20px;
+    border-radius:30px;
+    border:none;
+    outline:none;
+    font-size:16px;
+}
+.search-wrap button{
+    padding:14px 28px;
+    margin-left:10px;
+    border-radius:30px;
+    border:none;
+    cursor:pointer;
+}
+/* MOVIE SECTION */
+.genre-section{
+    padding:30px;
+}
+.genre-title{
+    font-size:26px;
+    font-weight:bold;
+    margin-bottom:25px;
+}
+.cards-row{
+    display:flex;
+    gap:25px;
+    overflow-x:auto;
+    padding-bottom:20px;
+}
+/* MOVIE CARD */
+.movie-card{
+    min-width:180px;
+    background:#1b1b1b;
+    border-radius:15px;
+    overflow:hidden;
+    transition:0.3s;
+}
+.movie-card:hover{
+    transform:translateY(-8px);
+}
+.movie-poster{
+    width:180px;
+    height:260px;
+    object-fit:cover;
+}
+.movie-info{
+    padding:12px;
+}
+.movie-title{
+    font-size:16px;
+    font-weight:bold;
+}
+.movie-details{
+    margin-top:8px;
+    font-size:14px;
+    color:#cccccc;
+}
+.message{
+    color:#aaa;
+    font-size:18px;
+}
+</style>
+</head>
+<body>
+<!-- NAVBAR -->
+<nav class="navbar">
+<div class="brand">
+<img 
+src="/static/assets/logo.png"
+class="navbar-logo"
+alt="Movie Mandala Logo">
+<span class="brand-name">
+Movie Mandala
+</span>
+</div>
+<div class="nav-links">
+<a href="/result">
+Home
+</a>
+<a href="/about">
+About Us
+</a>
+<div class="user-menu" id="userMenu">
+
+    <button id="authButton" class="btn-signin">
+        Sign In
+    </button>
+
+    <div class="dropdown" id="dropdownMenu">
+
+    <div class="profile-header">
+
+        <div class="profile-avatar" id="profileAvatar">
+            G
+        </div>
+
+        <div class="profile-info">
+
+            <div id="profileUsername">
+                Username
+            </div>
+
+            <div id="profileEmail">
+                email@example.com
+            </div>
+
+        </div>
+
+    </div>
+
+    <hr>
+
+    <a href="#" id="changePasswordBtn">
+        🔒 Change Password
+    </a>
+
+    <a href="#" id="logoutBtn">
+        🚪 Logout
+    </a>
+
+</div>
+
+</div>
+</div>
+</nav>
+<!-- HERO -->
+<section class="hero">
+<h1>
+Find movies you'll <span>love</span>
+</h1>
+
+<p>
+Search a movie and discover similar movies.
+</p>
+<div class="search-wrap">
+<input
+type="text"
+id="searchInput"
+placeholder="Search for a movie..."
+>
+<button onclick="searchMovies()">
+Search
+</button>
+</div>
+</section>
+<!-- RESULTS -->
+<section 
+class="genre-section"
+id="resultSection"
+style="display:none;">
+<div class="genre-title">
+Results for:
+<span id="searchName"></span>
+</div>
+<div 
+class="cards-row"
+id="movieContainer">
+</div>
+</section>
+<!-- TRENDING MOVIES -->
+<section class="genre-section">
+<div class="genre-title">
+🔥 Trending Movies
+</div>
+<div 
+class="cards-row"
+id="trendingMovies">
+</div>
+</section>
+
+<!-- POPULAR MOVIES -->
+<section class="genre-section">
+<div class="genre-title">
+⭐ Popular Movies
+</div>
+<div 
+class="cards-row"
+id="popularMovies">
+</div>
+</section>
+
+
+<script>
+const API_URL = "http://127.0.0.1:8000";
+const POSTER_BASE = "https://image.tmdb.org/t/p/w300";
+const PLACEHOLDER = "https://via.placeholder.com/180x260?text=No+Poster";
+
+// `/movies` returns {movie_id, poster_url}; `/recommend/{id}` returns
+// {tmdb_id, poster_path}. Normalize both shapes into one card format.
+function normalizeMovie(movie){
+    const id = movie.movie_id ?? movie.tmdb_id;
+
+    let poster = movie.poster_url || null;
+    if(!poster && movie.poster_path){
+        poster = `${POSTER_BASE}${movie.poster_path}`;
+    }
+
+    return {
+        id: id,
+        title: movie.title,
+        poster: poster || PLACEHOLDER,
+        release_date: movie.release_date || "Unknown",
+        vote_average: movie.vote_average || "N/A"
+    };
+}
+
+function createMovieCard(rawMovie){
+    const movie = normalizeMovie(rawMovie);
+    return `
+<div class="movie-card" onclick="goToMovie(${movie.id})" style="cursor:pointer;">
+<img
+src="${movie.poster}"
+class="movie-poster"
+alt="${movie.title}"
+loading="lazy"
+onload="this.classList.add('loaded')"
+onerror="this.src='${PLACEHOLDER}'"
+>
+<div class="movie-info">
+<div class="movie-title">
+${movie.title}
+</div>
+<div class="movie-details">
+📅 ${movie.release_date}
+<br>
+⭐ ${movie.vote_average}
+</div>
+</div>
+</div>
+`;
+}
+
+// Clicking any movie card navigates here with the movie's id, so the
+// recommendations section can load on page load (see loadRecommendationsFromURL below).
+function goToMovie(movieId){
+    window.location.href = `/movie?movie_id=${movieId}`;
+}
+
+async function searchMovies(){
+const searchValue =
+document
+.getElementById("searchInput")
+.value
+.trim();
+if(searchValue===""){
+alert("Please enter movie name");
+return;
+}
+const token =
+localStorage.getItem("token");
+if(!token){
+alert("Please login first");
+window.location.href="/login";
+return;
+}
+const container =
+document.getElementById("movieContainer");
+document
+.getElementById("resultSection")
+.style.display="block";
+document
+.getElementById("searchName")
+.textContent =
+searchValue;
+container.innerHTML =
+`
+<p class="message">
+Loading movies...
+</p>
+`;
+try{
+const response =
+await fetch(
+`${API_URL}/movies?search=${encodeURIComponent(searchValue)}`,
+{
+method:"GET",
+headers:{
+"Authorization":
+`Bearer ${token}`,
+"accept":
+"application/json"
+}
+}
+);
+if(response.status===401){
+alert("Session expired. Please login again.");
+localStorage.removeItem("token");
+window.location.href="/login";
+return;
+}
+if(!response.ok){
+throw new Error("Movie fetch failed");
+}
+const movies =
+await response.json();
+if(movies.length===0){
+container.innerHTML=
+`
+<p class="message">
+No movies found.
+</p>
+`;
+return;
+}
+container.innerHTML =
+movies
+.map(createMovieCard)
+.join("");
+}
+catch(error){
+console.error(error);
+container.innerHTML=
+`
+<p class="message">
+Unable to load movies.
+</p>
+`;
+}
+}
+document
+.getElementById("searchInput")
+.addEventListener(
+"keypress",
+function(event){
+if(event.key==="Enter"){
+searchMovies();
+}
+}
+);
+
+// Helper: look up the first search match for each name in a list,
+// used by both the trending and popular rows below.
+async function fetchMoviesByName(movieNames){
+    const results = [];
+
+    for(let movie of movieNames){
+        const response = await fetch(
+            `${API_URL}/movies?search=${encodeURIComponent(movie)}`
+        );
+
+        if(!response.ok){
+            continue;
+        }
+
+        const data = await response.json();
+
+        if(data.length > 0){
+            results.push(data[0]);
+        }
+    }
+
+    return results;
+}
+
+async function loadTrendingMovies(){
+    
+
+    const movieNames = [
+        "Oppenheimer",
+        "Dune Part Two",
+        "Spider-Man Across the Spider-Verse",
+        "The Batman",
+        "Top Gun Maverick",
+        "Barbie",
+        "Everything Everywhere All at Once",
+        "Godzilla Minus One",
+        "Avatar The Way of Water",
+        "Poor Things"
+    ];
+
+    const allMovies = await fetchMoviesByName(movieNames);
+    document.getElementById("trendingMovies").innerHTML =
+        allMovies.map(createMovieCard).join("");
+}
+
+async function loadPopularMovies(){
+    
+
+    const movieNames = [
+        "The Shawshank Redemption",
+        "The Godfather",
+        "The Dark Knight",
+        "Inception",
+        "Interstellar",
+        "Fight Club",
+        "Pulp Fiction",
+        "Forrest Gump",
+        "The Matrix",
+        "Parasite"
+    ];
+
+    const popularMovies = await fetchMoviesByName(movieNames);
+    document.getElementById("popularMovies").innerHTML =
+        popularMovies.map(createMovieCard).join("");
+}
+
+// ---- Recommendations (the core "search a movie, get similar movies" flow) ----
+
+async function loadRecommendations(movieId){
+    const token = localStorage.getItem("token");
+    if(!token){
+        alert("Please login first");
+        window.location.href = "/login";
+        return;
+    }
+
+    const container = document.getElementById("movieContainer");
+    const resultSection = document.getElementById("resultSection");
+    resultSection.style.display = "block";
+    container.innerHTML = `<p class="message">Loading recommendations...</p>`;
+
+    try{
+        // Fetch the source movie so we can show its title in the heading.
+        const movieResponse = await fetch(
+            `${API_URL}/movies/${movieId}`,
+            { headers: { "Authorization": `Bearer ${token}` } }
+        );
+
+        if(movieResponse.status === 401){
+            alert("Session expired. Please login again.");
+            localStorage.removeItem("token");
+            window.location.href = "/login";
+            return;
+        }
+
+        if(movieResponse.ok){
+            const sourceMovie = await movieResponse.json();
+            document.getElementById("searchName").textContent =
+                `Movies similar to "${sourceMovie.title}"`;
+        } else {
+            document.getElementById("searchName").textContent = "Recommendations";
+        }
+
+        const recResponse = await fetch(
+            `${API_URL}/recommend/${movieId}`,
+            { headers: { "Authorization": `Bearer ${token}` } }
+        );
+
+        if(recResponse.status === 401){
+            alert("Session expired. Please login again.");
+            localStorage.removeItem("token");
+            window.location.href = "/login";
+            return;
+        }
+
+        if(!recResponse.ok){
+            container.innerHTML = `<p class="message">No recommendations found for this movie.</p>`;
+            return;
+        }
+
+        const recommendations = await recResponse.json();
+        if(recommendations.length === 0){
+            container.innerHTML = `<p class="message">No recommendations found.</p>`;
+            return;
+        }
+
+        container.innerHTML = recommendations.map(createMovieCard).join("");
+    }
+    catch(error){
+        console.error(error);
+        container.innerHTML = `<p class="message">Unable to load recommendations.</p>`;
+    }
+}
+
+// If the page was opened as /result?movie_id=123 (from clicking a card),
+// load recommendations for that movie instead of / in addition to the
+// trending & popular rows.
+function loadRecommendationsFromURL(){
+    const params = new URLSearchParams(window.location.search);
+    const movieId = params.get("movie_id");
+    if(movieId){
+        loadRecommendations(movieId);
+    }
+}
+
+function parseJwt(token){
+
+    try{
+
+        return JSON.parse(atob(token.split(".")[1]));
+
+    }
+    catch{
+
+        return {};
+
+    }
+
+}
+function updateNavbar(){
+
+    const token = localStorage.getItem("token");
+    const username = localStorage.getItem("username");
+
+    const button = document.getElementById("authButton");
+    const dropdown = document.getElementById("dropdownMenu");
+
+    if(token){
+
+        const firstLetter = username ? username.charAt(0).toUpperCase() : "U";
+
+        const payload = parseJwt(token);
+
+document.getElementById("profileAvatar").innerText = firstLetter;
+document.getElementById("profileUsername").innerText = username;
+document.getElementById("profileEmail").innerText = payload.email || "";
+
+        button.innerHTML = `
+        <div class="avatar-circle">
+        ${firstLetter}
+</div>
+`;
+        button.onclick = function(e){
+            e.stopPropagation();
+            dropdown.classList.toggle("show");
+        };
+
+    }
+    else{
+
+        button.innerHTML = "Sign In";
+
+        button.onclick = function(){
+            window.location.href="/login";
+        };
+
+    }
+
+}
+document.getElementById("logoutBtn").onclick = function(e){
+
+    e.preventDefault();
+
+    localStorage.removeItem("token");
+    localStorage.removeItem("username");
+
+    window.location.href="/login";
+
+};
+window.addEventListener("click", function(e){
+
+    const dropdown = document.getElementById("dropdownMenu");
+
+    if(
+        !document.getElementById("userMenu").contains(e.target)
+    ){
+        dropdown.classList.remove("show");
+    }
+
+});
+
+window.onload = function(){
+
+    updateNavbar();
+
+    loadTrendingMovies();
+
+    loadPopularMovies();
+
+    loadRecommendationsFromURL();
+
+    // ================= CHANGE PASSWORD MODAL =================
+
+    const changePasswordBtn = document.getElementById("changePasswordBtn");
+const changePasswordModal = document.getElementById("changePasswordModal");
+const closeModal = document.getElementById("closeModal");
+const cancelPassword = document.getElementById("cancelPassword");
+
+console.log({
+    changePasswordBtn,
+    changePasswordModal,
+    closeModal,
+    cancelPassword
+});
+
+    changePasswordBtn.addEventListener("click", function(e){
+
+        e.preventDefault();
+
+        document.getElementById("dropdownMenu").classList.remove("show");
+
+        changePasswordModal.style.display = "flex";
+
+    });
+
+    // Open popup
+changePasswordBtn.addEventListener("click", function(e){
+    e.preventDefault();
+    document.getElementById("dropdownMenu").classList.remove("show");
+    changePasswordModal.style.display = "flex";
+});
+
+// Close popup
+closeModal.addEventListener("click", closePasswordModal);
+
+cancelPassword.addEventListener("click", closePasswordModal);
+
+window.addEventListener("click", function(e){
+    if(e.target === changePasswordModal){
+        closePasswordModal();
+    }
+});
+
+document.addEventListener("keydown", function(e){
+    if(e.key === "Escape"){
+        closePasswordModal();
+    }
+});
+
+// Save password
+document
+    .getElementById("savePassword")
+    .addEventListener("click", changePassword);
+  };
+function closePasswordModal(){
+
+    document.getElementById("changePasswordModal").style.display = "none";
+
+    document.getElementById("currentPassword").value = "";
+
+    document.getElementById("newPassword").value = "";
+
+    document.getElementById("confirmPassword").value = "";
+
+}
+
+async function changePassword(){
+
+    const currentPassword =
+        document.getElementById("currentPassword").value.trim();
+
+    const newPassword =
+        document.getElementById("newPassword").value.trim();
+
+    const confirmPassword =
+        document.getElementById("confirmPassword").value.trim();
+
+    if(
+        !currentPassword ||
+        !newPassword ||
+        !confirmPassword
+    ){
+        alert("Please fill in all fields.");
+        return;
+    }
+
+    if(newPassword !== confirmPassword){
+        alert("New passwords do not match.");
+        return;
+    }
+
+    const token = localStorage.getItem("token");
+
+    try{
+
+        const response = await fetch(
+            `${API_URL}/change-password`,
+            {
+                method:"PUT",
+                headers:{
+                    "Content-Type":"application/json",
+                    "Authorization":`Bearer ${token}`
+                },
+                body:JSON.stringify({
+                    current_password: currentPassword,
+                    new_password: newPassword,
+                    confirm_password: confirmPassword
+                })
+            }
+        );
+
+        const data = await response.json();
+
+        if(response.ok){
+
+            alert(data.message);
+
+            closePasswordModal();
+
+        }
+        else{
+
+            alert(data.detail || data.message || "Unable to change password.");
+
+        }
+
+    }
+    catch(error){
+
+        console.error(error);
+
+        alert("Server error. Please try again.");
+
+    }
+
+} 
+</script>
+
+<!-- ================= CHANGE PASSWORD MODAL ================= -->
+
+<div id="changePasswordModal" class="modal">
+
+    <div class="modal-content">
+
+        <span class="close-modal" id="closeModal">&times;</span>
+
+        <h2>🔒 Change Password</h2>
+
+        <div class="input-group">
+            <label>Current Password</label>
+            <input
+                type="password"
+                id="currentPassword"
+                placeholder="Enter current password">
+        </div>
+
+        <div class="input-group">
+            <label>New Password</label>
+            <input
+                type="password"
+                id="newPassword"
+                placeholder="Enter new password">
+        </div>
+
+        <div class="input-group">
+            <label>Confirm Password</label>
+            <input
+                type="password"
+                id="confirmPassword"
+                placeholder="Confirm new password">
+        </div>
+
+        <div class="modal-buttons">
+
+            <button
+                class="cancel-btn"
+                id="cancelPassword">
+                Cancel
+            </button>
+
+            <button
+                class="save-btn"
+                id="savePassword">
+                Save Changes
+            </button>
+
+        </div>
+
+    </div>
+
+</div>
+
+</body>
+</html>
