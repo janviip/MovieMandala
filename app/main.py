@@ -50,6 +50,9 @@ def root():
 def result_page():
     return FileResponse(TEMPLATES_DIR / "result.html")
 
+@app.get("/movie")
+def movie_page():
+    return FileResponse(TEMPLATES_DIR / "movie.html")
 
 @app.get("/login")
 def login_page():

@@ -1,0 +1,457 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Movie Details | Movie Mandala</title>
+
+<link rel="stylesheet" href="/static/css/style.css">
+<link rel="stylesheet" href="/static/css/home.css">
+
+<style>
+
+body{
+    background:
+    radial-gradient(
+        ellipse 900px 700px at 100% 0%,
+        rgba(229,9,20,0.55),
+        rgba(139,0,0,0.25),
+        transparent 65%
+    ),
+    #050505;
+
+    color:white;
+}
+
+
+/* DETAILS CONTAINER */
+
+.details-page{
+
+    padding:60px 40px;
+
+    animation:pageFade .7s ease;
+
+}
+
+
+@keyframes pageFade{
+
+    from{
+        opacity:0;
+        transform:translateY(30px);
+    }
+
+    to{
+        opacity:1;
+        transform:translateY(0);
+    }
+
+}
+
+
+/* MOVIE CARD */
+
+.movie-details{
+
+    max-width:1100px;
+
+    margin:auto;
+
+    display:flex;
+
+    gap:45px;
+
+    background:#181818;
+
+    padding:35px;
+
+    border-radius:25px;
+
+    box-shadow:
+    0 20px 50px rgba(0,0,0,.6);
+
+}
+
+
+/* POSTER */
+
+
+.movie-details img{
+
+    width:320px;
+
+    height:450px;
+
+    object-fit:cover;
+
+    border-radius:20px;
+
+    transition:.4s;
+
+    animation:posterIn .8s ease;
+
+}
+
+
+
+.movie-details img:hover{
+
+    transform:scale(1.05);
+
+    box-shadow:
+    0 0 30px rgba(229,9,20,.5);
+
+}
+
+
+
+@keyframes posterIn{
+
+    from{
+
+        opacity:0;
+
+        transform:translateX(-50px);
+
+    }
+
+    to{
+
+        opacity:1;
+
+        transform:translateX(0);
+
+    }
+
+}
+
+
+/* INFO */
+
+.movie-info{
+
+    animation:infoIn .8s ease;
+
+}
+
+
+
+@keyframes infoIn{
+
+    from{
+
+        opacity:0;
+
+        transform:translateX(50px);
+
+    }
+
+    to{
+
+        opacity:1;
+
+        transform:translateX(0);
+
+    }
+
+}
+
+
+
+.movie-info h1{
+
+    font-size:42px;
+
+    margin-bottom:20px;
+
+    color:#fff;
+
+}
+
+
+
+.movie-info p{
+
+    color:#ccc;
+
+    line-height:1.6;
+
+    margin-bottom:12px;
+
+}
+
+
+
+.movie-info strong{
+
+    color:white;
+
+}
+
+
+/* BUTTON */
+
+
+#recommendBtn{
+
+    margin-top:25px;
+
+    background:#e50914;
+
+    color:white;
+
+    border:none;
+
+    padding:14px 28px;
+
+    border-radius:10px;
+
+    font-size:16px;
+
+    font-weight:700;
+
+    cursor:pointer;
+
+    transition:.3s;
+
+}
+
+
+
+#recommendBtn:hover{
+
+    background:#c40812;
+
+    transform:translateY(-3px);
+
+    box-shadow:
+    0 10px 25px rgba(229,9,20,.5);
+
+}
+
+
+
+/* MOBILE */
+
+@media(max-width:800px){
+
+
+.movie-details{
+
+    flex-direction:column;
+
+    align-items:center;
+
+}
+
+
+.movie-details img{
+
+    width:250px;
+
+    height:370px;
+
+}
+
+
+.movie-info h1{
+
+    font-size:30px;
+
+}
+
+
+}
+
+</style>
+
+</head>
+
+
+<body>
+
+
+<!-- NAVBAR -->
+
+<nav class="navbar">
+
+
+<div class="brand">
+
+<img 
+src="/static/assets/logo.png"
+class="navbar-logo">
+
+<span class="brand-name">
+Movie Mandala
+</span>
+
+
+</div>
+
+
+<div class="nav-links">
+
+<a href="/result">
+Home
+</a>
+
+
+<a href="/about">
+About Us
+</a>
+
+
+<button class="btn-signin">
+Sign In
+</button>
+
+
+</div>
+
+
+</nav>
+
+
+
+<div id="movie-container">
+
+Loading movie...
+
+</div>
+
+
+
+<script>
+
+
+const params =
+new URLSearchParams(window.location.search);
+
+
+const movieId =
+params.get("movie_id");
+
+
+
+async function loadMovie(){
+
+
+const response =
+await fetch(`/movies/${movieId}`);
+
+
+const movie =
+await response.json();
+
+
+
+document.getElementById("movie-container").innerHTML = `
+
+
+<div class="details-page">
+
+
+<div class="movie-details">
+
+
+<img src="${movie.poster_url}">
+
+
+
+<div class="movie-info">
+
+
+<h1>
+${movie.title}
+</h1>
+
+
+<p>
+<strong>⭐ Rating:</strong>
+${movie.vote_average}
+</p>
+
+
+<p>
+<strong>📅 Release Date:</strong>
+${movie.release_date}
+</p>
+
+
+<p>
+<strong>🎭 Genres:</strong>
+${movie.genres}
+</p>
+
+
+<p>
+<strong>🎬 Director:</strong>
+${movie.director}
+</p>
+
+
+<p>
+<strong>👥 Cast:</strong>
+${movie.cast}
+</p>
+
+
+
+<p>
+<strong>📝 Overview</strong>
+</p>
+
+
+<p>
+${movie.overview}
+</p>
+
+
+
+<button id="recommendBtn">
+🎯 Movies Like This
+</button>
+
+
+
+</div>
+
+
+</div>
+
+
+</div>
+
+
+`;
+
+
+
+document
+.getElementById("recommendBtn")
+.onclick=function(){
+
+window.location.href =
+`/result?movie_id=${movie.movie_id}`;
+
+};
+
+
+}
+
+
+
+loadMovie();
+
+
+</script>
+
+
+</body>
+
+</html>

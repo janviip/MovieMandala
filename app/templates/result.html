@@ -229,7 +229,7 @@ function normalizeMovie(movie){
 function createMovieCard(rawMovie){
     const movie = normalizeMovie(rawMovie);
     return `
-<div class="movie-card" onclick="goToRecommendations(${movie.id})" style="cursor:pointer;">
+<div class="movie-card" onclick="goToMovie(${movie.id})" style="cursor:pointer;">
 <img
 src="${movie.poster}"
 class="movie-poster"
@@ -254,8 +254,8 @@ ${movie.title}
 
 // Clicking any movie card navigates here with the movie's id, so the
 // recommendations section can load on page load (see loadRecommendationsFromURL below).
-function goToRecommendations(movieId){
-    window.location.href = `/result?movie_id=${movieId}`;
+function goToMovie(movieId){
+    window.location.href = `/movie?movie_id=${movieId}`;
 }
 
 async function searchMovies(){
@@ -378,16 +378,16 @@ async function loadTrendingMovies(){
     
 
     const movieNames = [
-        "Avatar",
-        "Titanic",
-        "Inception",
-        "Interstellar",
-        "Avengers",
-        "The Dark Knight",
-        "Spider-Man",
-        "Dune",
-        "Joker",
-        "Oppenheimer"
+        "Oppenheimer",
+        "Dune Part Two",
+        "Spider-Man Across the Spider-Verse",
+        "The Batman",
+        "Top Gun Maverick",
+        "Barbie",
+        "Everything Everywhere All at Once",
+        "Godzilla Minus One",
+        "Avatar The Way of Water",
+        "Poor Things"
     ];
 
     const allMovies = await fetchMoviesByName(movieNames);
@@ -399,13 +399,16 @@ async function loadPopularMovies(){
     
 
     const movieNames = [
-        "Avatar",
+        "The Shawshank Redemption",
+        "The Godfather",
+        "The Dark Knight",
         "Inception",
-        "Titanic",
-        "Avengers",
         "Interstellar",
-        "Joker",
-        "Dune"
+        "Fight Club",
+        "Pulp Fiction",
+        "Forrest Gump",
+        "The Matrix",
+        "Parasite"
     ];
 
     const popularMovies = await fetchMoviesByName(movieNames);
