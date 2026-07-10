@@ -1,4 +1,7 @@
-import requests
+# Deprecated
+# This script seeds movies from the TMDB Popular API.
+# The project now uses seed_from_parquet.py to import the
+# complete 5992-movie dataset used by the ML recommender.import requests
 from app.core.config import TMDB_API_KEY
 from app.core.database import SessionLocal
 from app.models.models import Movie
