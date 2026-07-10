@@ -339,8 +339,24 @@ Recent improvements include:
 
 ---
 
-# 👨‍💻 Developed By
+# ❤️ About the Team
 
-Movie Mandala was developed as a **minor project** by a team of Computer Engineering students using FastAPI, Supabase, and Machine Learning.
+Movie Mandala is a semester minor project developed by a team of Computer Engineering students from **Gandaki College of Engineering and Science (GCES)**.
 
----
+Our goal was to combine modern backend technologies, machine learning, and an interactive web interface into a complete movie recommendation system.
+
+## Team Members
+
+| Member | Responsibilities |
+|---------|------------------|
+| **Janavi Pratihast** | Backend Development, FastAPI, Database Design, Authentication, API Integration |
+| **Asmita Adhikari** | Frontend Development, UI/UX Design, HTML, CSS, JavaScript |
+| **Swornima Dhungana** | Machine Learning, Data Processing, Recommendation System |
+
+We built this project collaboratively, with each member contributing to their area of expertise while working together to integrate all components into a single application.
+
+# 🙏 Acknowledgements
+
+We would like to express our sincere gratitude to our project supervisor and the faculty members of the **Department of Computer Engineering, Gandaki College of Engineering and Science (GCES)** for their guidance, encouragement, and valuable feedback throughout the development of this project.
+
+We also acknowledge the use of the **TMDB API** for movie metadata and posters, along with open-source Python libraries such as **FastAPI**, **SQLAlchemy**, **scikit-learn**, **Pandas**, and **NumPy**, which made this project possible.
