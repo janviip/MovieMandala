@@ -238,10 +238,7 @@ class MovieRecommender:
             else 0.0
         )
 
-        return RecommendationResult(
-            tmdb_id=int(row["tmdb_id"]),
-            title=str(row["title"]),
-            score=round(float(score), 6),
+        
         return RecommendationResult(
             tmdb_id=int(row["tmdb_id"]),
             title=str(row["title"]),

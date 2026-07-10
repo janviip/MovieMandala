@@ -5,7 +5,7 @@ from app.models.models import Movie
 
 BASE_URL = "https://api.themoviedb.org/3"
 
-def fetch_popular_movies(pages=25):
+def fetch_popular_movies(pages=300):
     all_movies = []
     for page in range(1, pages + 1):
         url = f"{BASE_URL}/movie/popular"
@@ -25,7 +25,7 @@ def get_movie_details(movie_id):
 
 def seed_database():
     db = SessionLocal()
-    movies = fetch_popular_movies(pages=5)  # 5 pages = ~100 movies
+    movies = fetch_popular_movies(pages=300)  # 300 pages = ~6000 movies
 
     for m in movies:
         details = get_movie_details(m["id"])
