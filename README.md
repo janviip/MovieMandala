@@ -198,7 +198,7 @@ Import the complete movie catalog into PostgreSQL:
 python -m app.data.seed_from_parquet
 ```
 
-This imports approximately **5,992 movies** from
+This imports approximately **6,000 movies** from
 
 ```
 artifacts/movie_catalog.parquet
