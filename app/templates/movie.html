@@ -318,9 +318,11 @@ Sign In
 
 
 
-<div id="movie-container">
+<div id="movie-container" style="text-align:center;padding:80px;">
 
-Loading movie...
+    <div class="loader"></div>
+
+    <p>Loading movie...</p>
 
 </div>
 
@@ -411,11 +413,26 @@ ${movie.cast}
 ${movie.overview}
 </p>
 
+<div style="display:flex; gap:15px; margin-top:25px;">
 
+    <button id="recommendBtn">
+        🎯 Movies Like This
+    </button>
 
-<button id="recommendBtn">
-🎯 Movies Like This
-</button>
+    <button id="watchlistBtn"
+        style="
+        background:#222;
+        color:white;
+        border:1px solid #e50914;
+        padding:14px 28px;
+        border-radius:10px;
+        font-size:16px;
+        cursor:pointer;
+        transition:.3s;">
+        ❤️ Add to Watchlist
+    </button>
+
+</div>
 
 
 
@@ -441,13 +458,95 @@ window.location.href =
 
 };
 
+document
+.getElementById("watchlistBtn")
+.onclick=function(){
+
+    toggleWatchlist(movie.movie_id);
+
+};
+
+checkWatchlist(movie.movie_id);
 
 }
 
 
 
 loadMovie();
+async function checkWatchlist(movieId){
 
+    const token = localStorage.getItem("token");
+
+    if(!token) return;
+
+    const response = await fetch(`/watchlist/check/${movieId}`,{
+        headers:{
+            Authorization:`Bearer ${token}`
+        }
+    });
+
+    const data = await response.json();
+
+    const btn = document.getElementById("watchlistBtn");
+
+    if(data.in_watchlist){
+
+        btn.innerHTML="🗑 Remove from Watchlist";
+        btn.dataset.saved="true";
+
+    }
+    else{
+
+        btn.innerHTML="❤️ Add to Watchlist";
+        btn.dataset.saved="false";
+
+    }
+
+}
+async function toggleWatchlist(movieId){
+
+    const token = localStorage.getItem("token");
+
+    if(!token){
+
+        window.location="/login";
+        return;
+
+    }
+
+    const btn=document.getElementById("watchlistBtn");
+
+    if(btn.dataset.saved==="true"){
+
+        await fetch(`/watchlist/${movieId}`,{
+
+            method:"DELETE",
+
+            headers:{
+                Authorization:`Bearer ${token}`
+            }
+
+        });
+
+    }
+
+    else{
+
+        await fetch(`/watchlist/${movieId}`,{
+
+            method:"POST",
+
+            headers:{
+                Authorization:`Bearer ${token}`
+            }
+
+        });
+
+    }
+
+    checkWatchlist(movieId);
+
+}
 
 </script>
 

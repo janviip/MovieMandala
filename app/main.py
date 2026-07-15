@@ -7,7 +7,7 @@ from fastapi.responses import FileResponse, RedirectResponse
 
 from app.core.database import Base, engine
 from app.core.ml_client import load_recommender
-from app.api import auth, movies, recommend
+from app.api import auth, movies, recommend, watchlist
 
 BASE_DIR = Path(__file__).parent
 TEMPLATES_DIR = BASE_DIR / "templates"
@@ -29,6 +29,7 @@ app.add_middleware(
 app.include_router(auth.router, tags=["Authentication"])
 app.include_router(movies.router, tags=["Movies"])
 app.include_router(recommend.router, tags=["Recommendations"])
+app.include_router(watchlist.router)
 
 # Static assets: CSS, JS, images -> served at /static/...
 app.mount("/static", StaticFiles(directory=STATIC_DIR), name="static")
@@ -74,3 +75,7 @@ def about_page():
 @app.get("/api/status")
 def api_status():
     return {"message": "Welcome to Movie Mandala API"}
+
+@app.get("/watchlist")
+def watchlist_page():
+    return FileResponse(TEMPLATES_DIR / "watchlist.html")
