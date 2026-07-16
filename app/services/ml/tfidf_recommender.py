@@ -39,6 +39,7 @@ class RecommendationResult:
     title: str
     score: float
     overview: str
+    label: str = ""
     release_date: str = ""
     genres: tuple[str, ...] = ()
     poster_path: str | None = None
@@ -50,6 +51,7 @@ class RecommendationResult:
             "tmdb_id": self.tmdb_id,
             "title": self.title,
             "score": self.score,
+            "label": self.label,
             "overview": self.overview,
             "release_date": self.release_date,
             "genres": self.genres,
@@ -161,7 +163,25 @@ class MovieRecommender:
         candidate_indices = np.argpartition(-scores, kth=k - 1)[:k]
         ranked_indices = candidate_indices[np.argsort(-scores[candidate_indices])]
 
-        return [self._row_to_result(int(i), float(scores[i])) for i in ranked_indices]
+        results = []
+
+        top_score = scores[ranked_indices[0]]
+
+        for i in ranked_indices:
+            raw_score = float(scores[i])
+ 
+            if top_score > 0:
+                normalized_score = (raw_score / top_score) * 98
+            else:
+                normalized_score = 0
+
+                normalized_score = max(50, round(normalized_score, 1))
+
+            results.append(
+                self._row_to_result(int(i), normalized_score)
+           )
+
+        return results  
 
     def recommend_by_tmdb_id(self, tmdb_id: int, k: int = 10) -> list[dict[str, Any]]:
         self._require_fitted()
@@ -212,37 +232,33 @@ class MovieRecommender:
             return self.recommend_from_text(str(query), k=k)
         raise ValueError(f"Unsupported recommendation mode: {mode}")
 
+    @staticmethod
+    def get_recommendation_label(score: float) -> str:
+        if score >= 95:
+            return "🌟 Excellent Match"
+        elif score >= 85:
+            return "⭐ Highly Recommended"
+        elif score >= 75:
+            return "👍 Recommended"
+        elif score >= 65:
+            return "🙂 Worth Watching"
+        else:
+            return "🎬 Similar Movie"
+
     def _row_to_result(self, index: int, score: float) -> RecommendationResult:
         self._require_fitted()
         assert self.catalog_ is not None
 
         row = self.catalog_.iloc[index]
 
-        genres_value = row.get("genres")
-        if genres_value is None or (np.isscalar(genres_value) and pd.isna(genres_value)):
-            genres_tuple: tuple[str, ...] = ()
-        else:
-            genres_tuple = tuple(genres_value)
+        similarity = round(float(score) , 1)
+        label = self.get_recommendation_label(similarity)
 
-        vote_average_value = row.get("vote_average")
-        vote_average = (
-            float(vote_average_value)
-            if vote_average_value is not None and not pd.isna(vote_average_value)
-            else 0.0
-        )
-
-        popularity_value = row.get("popularity")
-        popularity = (
-            float(popularity_value)
-            if popularity_value is not None and not pd.isna(popularity_value)
-            else 0.0
-        )
-
-        
         return RecommendationResult(
             tmdb_id=int(row["tmdb_id"]),
             title=str(row["title"]),
-            score=round(float(score), 6),
+            score=similarity,
+            label=label,
             overview=str(row.get("overview", "") or ""),
             release_date=str(row.get("release_date", "") or ""),
             genres=_as_str_tuple(row.get("genres")),
@@ -250,6 +266,7 @@ class MovieRecommender:
             vote_average=float(row.get("vote_average", 0.0) or 0.0),
             popularity=float(row.get("popularity", 0.0) or 0.0),
         )
+    
     def save(self, artifact_dir: str | Path) -> None:
         self._require_fitted()
         assert self.catalog_ is not None

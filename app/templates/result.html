@@ -16,8 +16,14 @@ body{
     text-align:center;
     padding:60px 20px;
 }
+
 .search-wrap{
     margin-top:25px;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    gap:10px;
+    position:relative;
 }
 #searchInput{
     width:350px;
@@ -33,6 +39,13 @@ body{
     border-radius:30px;
     border:none;
     cursor:pointer;
+    background:#e50914;
+    color:white;
+    font-weight:bold;
+}
+
+.search-wrap button:hover{
+    background:#c40812;
 }
 /* MOVIE SECTION */
 .genre-section{
@@ -158,14 +171,26 @@ Find movies you'll <span>love</span>
 Search a movie and discover similar movies.
 </p>
 <div class="search-wrap">
-<input
-type="text"
-id="searchInput"
-placeholder="Search for a movie..."
->
-<button onclick="searchMovies()">
-Search
-</button>
+
+    <div class="search-input-wrapper">
+
+        <input
+            type="text"
+            id="searchInput"
+            placeholder="Search by title, genre, cast or director..."
+            autocomplete="off"
+        >
+
+        <div id="suggestions" class="suggestions-box"></div>
+
+    </div>
+
+    <button class="search-btn" onclick="searchMovies()">
+        Search
+    </button>
+
+</div>
+
 </div>
 </section>
 <!-- RESULTS -->
@@ -210,6 +235,8 @@ const API_URL = "http://127.0.0.1:8000";
 const POSTER_BASE = "https://image.tmdb.org/t/p/w300";
 const PLACEHOLDER = "https://via.placeholder.com/180x260?text=No+Poster";
 
+let suggestionBox;
+
 // `/movies` returns {movie_id, poster_url}; `/recommend/{id}` returns
 // {tmdb_id, poster_path}. Normalize both shapes into one card format.
 function normalizeMovie(movie){
@@ -225,32 +252,59 @@ function normalizeMovie(movie){
         title: movie.title,
         poster: poster || PLACEHOLDER,
         release_date: movie.release_date || "Unknown",
-        vote_average: movie.vote_average || "N/A"
+        vote_average: movie.vote_average || "N/A",
+        score: movie.score || null,
+        label: movie.label || ""
     };
 }
 
 function createMovieCard(rawMovie){
+
     const movie = normalizeMovie(rawMovie);
+
     return `
 <div class="movie-card" onclick="goToMovie(${movie.id})" style="cursor:pointer;">
-<img
-src="${movie.poster}"
-class="movie-poster"
-alt="${movie.title}"
-loading="lazy"
-onload="this.classList.add('loaded')"
-onerror="this.src='${PLACEHOLDER}'"
->
-<div class="movie-info">
-<div class="movie-title">
-${movie.title}
-</div>
-<div class="movie-details">
-📅 ${movie.release_date}
-<br>
-⭐ ${movie.vote_average}
-</div>
-</div>
+
+    <img
+        src="${movie.poster}"
+        class="movie-poster"
+        alt="${movie.title}"
+        loading="lazy"
+        onload="this.classList.add('loaded')"
+        onerror="this.src='${PLACEHOLDER}'"
+    >
+
+    <div class="movie-info">
+
+        <div class="movie-title">
+            ${movie.title}
+        </div>
+
+        <div class="movie-details">
+
+            📅 ${movie.release_date}
+
+            <br>
+
+            ⭐ ${movie.vote_average}
+
+            ${
+                movie.score
+                ? `
+                <br>
+                🎯 ${movie.score}% Match
+                <br>
+                <span style="color:#4CAF50;font-weight:bold;">
+                    ${movie.label}
+                </span>
+                `
+                : ""
+            }
+
+        </div>
+
+    </div>
+
 </div>
 `;
 }
@@ -352,6 +406,70 @@ searchMovies();
 }
 }
 );
+document
+.getElementById("searchInput")
+.addEventListener("input", loadSuggestions);
+
+async function loadSuggestions() {
+
+    const text = document
+        .getElementById("searchInput")
+        .value
+        .trim();
+
+    if (text.length < 2) {
+        suggestionBox.style.display = "none";
+        suggestionBox.innerHTML = "";
+        return;
+    }
+
+    try {
+
+        const response = await fetch(
+            `${API_URL}/movies/suggestions?search=${encodeURIComponent(text)}`
+        );
+
+        if (!response.ok) return;
+
+        const movies = await response.json();
+
+        if (movies.length === 0) {
+            suggestionBox.style.display = "none";
+            suggestionBox.innerHTML = "";
+            return;
+        }
+
+        suggestionBox.innerHTML = "";
+
+        movies.forEach(movie => {
+
+            const item = document.createElement("div");
+
+            item.className = "suggestion-item";
+
+            item.textContent = movie.title;
+
+            item.onclick = () => selectSuggestion(movie.title);
+
+        suggestionBox.appendChild(item);
+
+});
+
+suggestionBox.style.display = "block";
+
+    } catch (error) {
+        console.error(error);
+    }
+}
+
+function selectSuggestion(title) {
+
+    document.getElementById("searchInput").value = title;
+
+    suggestionBox.style.display = "none";
+
+    searchMovies();
+}
 
 // Helper: look up the first search match for each name in a list,
 // used by both the trending and popular rows below.
@@ -573,8 +691,16 @@ window.addEventListener("click", function(e){
     }
 
 });
+document.addEventListener("click", function(e){
 
+    if(!document.querySelector(".search-wrap").contains(e.target)){
+        suggestionBox.style.display = "none";
+    }
+
+});
 window.onload = function(){
+
+    suggestionBox = document.getElementById("suggestions");
 
     updateNavbar();
 

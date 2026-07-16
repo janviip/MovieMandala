@@ -1,0 +1,14 @@
+[33mcommit ad7d7c6dd223ca577c2adefedc0634c4aced2a9c[m[33m ([m[1;31morigin/main[m[33m, [m[1;31morigin/HEAD[m[33m, [m[1;32mmain[m[33m)[m
+Author: janhvii21 <janavipratihast00@gmail.com>
+Date:   Wed Jul 15 13:31:51 2026 +0545
+
+    Added Watchlist feature
+
+ app/api/watchlist.py         | 107 [32m++++++++++++[m
+ app/main.py                  |   7 [32m+[m[31m-[m
+ app/models/models.py         |  29 [32m+++[m[31m-[m
+ app/static/css/style.css     |  23 [32m+++[m
+ app/templates/movie.html     | 111 [32m+++++++++++[m[31m-[m
+ app/templates/result.html    |   3 [32m+[m
+ app/templates/watchlist.html | 402 [32m+++++++++++++++++++++++++++++++++++++++++++[m
+ 7 files changed, 673 insertions(+), 9 deletions(-)
