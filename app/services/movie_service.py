@@ -92,17 +92,8 @@ def get_all_movies(
                     movie.get("vote_average")
 
             })
-
-
-        return tmdb_movies
-
-
-
+    return tmdb_movies
     return []
-
-
-
-
 
 def get_movie_by_id(
     db: Session,

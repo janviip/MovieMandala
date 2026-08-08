@@ -16,37 +16,74 @@ body{
     text-align:center;
     padding:60px 20px;
 }
-
 .search-wrap{
-    margin-top:25px;
     display:flex;
-    justify-content:center;
     align-items:center;
-    gap:10px;
+
+    width:900px;
+    max-width:90%;
+    margin:40px auto;
+
+    padding:8px;
+
+    background:rgba(255,255,255,.05);
+    border-radius:60px;
+
+    box-shadow:
+        0 10px 35px rgba(0,0,0,.45),
+        0 0 18px rgba(229,9,20,.12);
+}
+
+/* THIS IS THE MISSING PART */
+.search-input-wrapper{
+    flex:1;
     position:relative;
 }
+
 #searchInput{
-    width:350px;
-    padding:14px 20px;
-    border-radius:30px;
+    width:84%;
+    height:50px;
+
+    padding:0 28px;
+
     border:none;
     outline:none;
-    font-size:16px;
-}
-.search-wrap button{
-    padding:14px 28px;
-    margin-left:10px;
-    border-radius:30px;
-    border:none;
-    cursor:pointer;
-    background:#e50914;
-    color:white;
-    font-weight:bold;
+
+    background:white;
+    color:#222;
+
+    border-radius:50px;
+
+    font-size:18px;
 }
 
-.search-wrap button:hover{
-    background:#c40812;
+#searchInput::placeholder{
+    color:#777;
 }
+.search-btn{
+    width:100px;          /* Slightly narrower */
+    height:50px;          /* Reduced from 64px */
+
+    margin-left:10px;
+
+    border:none;
+    border-radius:40px;
+
+    background:#e50914;
+    color:#fff;
+
+    font-size:18px;
+    font-weight:600;
+
+    cursor:pointer;
+    transition:0.3s ease;
+}
+
+.search-btn:hover{
+    background:#c40812;
+    transform:translateY(-1px);
+}
+
 /* MOVIE SECTION */
 .genre-section{
     padding:30px;
